@@ -57,7 +57,9 @@ export interface Umkm {
   operations?: BusinessFact[];
   roles?: BusinessFact[];
   gaps?: string[];
-  priority?: string;
+  priorityRank?: number;
+  priorityTotal?: number;
+  prioritySummary?: string;
   potentials?: string[];
   videos?: { src: string; poster: string }[];
   description?: string;
