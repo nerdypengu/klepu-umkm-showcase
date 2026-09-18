@@ -33,7 +33,7 @@ export function SiteFooter() {
     <footer className="border-t border-border bg-background">
       <div className="mx-auto flex max-w-6xl flex-col gap-3 px-6 py-8 text-sm text-muted-foreground md:flex-row md:items-center md:justify-between">
         <p className="font-semibold text-foreground/75">Lapak UMKM Desa Klepu · Sooko, Ponorogo</p>
-        <p className="max-w-xl text-xs md:text-right">Nilai investasi bersifat indikatif dan perlu verifikasi—bukan realisasi atau jaminan hasil.</p>
+        <p className="max-w-xl text-xs md:text-right">Nilai investasi bersifat indikatif—bukan realisasi atau jaminan hasil.</p>
       </div>
     </footer>
   );

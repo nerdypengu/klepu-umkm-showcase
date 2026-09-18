@@ -41,7 +41,7 @@ function HomePage() {
                 Investasi yang tumbuh <span className="text-primary">dari desa.</span>
               </h1>
               <p className="mt-5 max-w-lg text-lg leading-relaxed text-muted-foreground">
-                Mengenal potensi tujuh UMKM aktif serta kelompok tani, peternakan, dan wisata Desa Klepu—lengkap dengan kesiapan, kebutuhan, dan status datanya.
+                Mengenal potensi tujuh UMKM aktif serta kelompok tani, peternakan, dan wisata Desa Klepu—lengkap dengan kesiapan, kebutuhan, dan peluang pengembangannya.
               </p>
               <div className="mt-7 flex flex-wrap gap-3">
                 <Button asChild variant="clay" size="lg"><Link to="/" hash="umkm">Lihat UMKM <ArrowRight /></Link></Button>
