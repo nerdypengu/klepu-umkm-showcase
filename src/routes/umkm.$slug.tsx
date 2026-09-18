@@ -64,6 +64,26 @@ function UmkmDetailPage() {
                   <div key={fact.label} className="grid gap-2 rounded-2xl border border-border p-4 sm:grid-cols-[1fr_1.4fr] sm:items-center"><p className="text-sm font-bold">{fact.label}</p><p className="text-sm text-muted-foreground">{fact.value}</p></div>
                 ))}
               </div>
+              {item.operations && item.operations.length > 0 && (
+                <div className="mt-10">
+                  <h3 className="font-display text-2xl font-extrabold">Bahan baku, alat, dan penjualan</h3>
+                  <div className="mt-5 space-y-3">
+                    {item.operations.map((fact) => (
+                      <div key={fact.label} className="grid gap-2 rounded-2xl border border-border p-4 sm:grid-cols-[1fr_1.4fr] sm:items-center"><p className="text-sm font-bold">{fact.label}</p><p className="text-sm text-muted-foreground">{fact.value}</p></div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {item.potentials && item.potentials.length > 0 && (
+                <div className="mt-10">
+                  <h3 className="font-display text-2xl font-extrabold">Potensi desa yang menopang</h3>
+                  <ul className="mt-5 space-y-2">
+                    {item.potentials.map((potential) => (
+                      <li key={potential} className="flex gap-2 rounded-2xl bg-background p-4 text-sm leading-relaxed text-muted-foreground"><Sprout className="mt-0.5 size-4 shrink-0 text-primary" />{potential}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
 
             <aside>
