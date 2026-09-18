@@ -1,8 +1,9 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, ArrowRight, Check, CircleAlert, Clock, ListChecks, MapPin, MessageCircle, Sprout, Target, TrendingUp, Users } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, CircleAlert, Clock, ListChecks, MapPin, MessageCircle, Sparkles, Sprout, Target, TrendingUp, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
-import { InvestmentChart } from "@/components/investment-chart";
+import { InvestmentPie } from "@/components/investment-pie";
+import { InvestmentScoreCard } from "@/components/investment-score";
 import { getUmkm, umkmList } from "@/lib/umkm-data";
 
 export const Route = createFileRoute("/umkm/$slug")({
@@ -46,7 +47,9 @@ function UmkmDetailPage() {
             </div>
             <img src={item.image} alt={item.imageAlt} width={900} height={720} className="aspect-[5/4] w-full rounded-[2rem] object-cover shadow-[0_14px_0_var(--shadow-soft)]" />
           </div>
+          <div className="mt-10"><InvestmentScoreCard score={item.score} /></div>
         </section>
+
 
         <section className="border-y border-border bg-card">
           <div className="mx-auto grid max-w-6xl gap-10 px-5 py-14 sm:px-6 lg:grid-cols-[1.15fr_0.85fr]">
@@ -58,7 +61,7 @@ function UmkmDetailPage() {
                 <div className="rounded-2xl bg-background p-4"><p className="text-xs font-bold text-muted-foreground">Produk utama</p><p className="mt-1 font-semibold">{item.product}</p></div>
                 {item.price && <div className="rounded-2xl bg-background p-4"><p className="text-xs font-bold text-muted-foreground">Harga</p><p className="mt-1 font-semibold">{item.price}</p></div>}
                 <div className="rounded-2xl bg-background p-4"><p className="text-xs font-bold text-muted-foreground">Pemilik / pengelola</p><p className="mt-1 font-semibold">{item.owner}</p></div>
-                <div className="rounded-2xl bg-background p-4 sm:col-span-2"><p className="flex items-center gap-2 text-xs font-bold text-muted-foreground"><Target className="size-3.5" /> Pasar yang dituju</p><p className="mt-1 leading-relaxed">{item.market}</p></div>
+                <div className="rounded-2xl bg-background p-4"><p className="text-xs font-bold text-muted-foreground">Kategori</p><p className="mt-1 font-semibold">{item.category}</p></div>
               </div>
               <div className="mt-8 space-y-3">
                 {item.facts.map((fact) => (
