@@ -486,3 +486,8 @@ export const umkmList: Umkm[] = [
 export function getUmkm(slug: string) {
   return umkmList.find((item) => item.slug === slug);
 }
+
+export function scoreTotal(score: InvestmentScore) {
+  const values = [score.distribution, score.technology, score.market, score.finance, score.materials];
+  return Math.round(values.reduce((sum, value) => sum + value, 0) / values.length);
+}
