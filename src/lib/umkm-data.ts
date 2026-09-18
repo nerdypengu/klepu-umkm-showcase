@@ -127,7 +127,7 @@ export const umkmList: Umkm[] = [
       { label: "Tenaga kerja", value: "5 orang" },
       { label: "Tempat produksi", value: "Rumah tangga" },
       { label: "Proses produksi", value: "Sekitar 3 hari per siklus" },
-      { label: "Digital", value: "WhatsApp dan Shopee; tautan belum dicatat" },
+      { label: "Digital", value: "WhatsApp dan Shopee; tautan sedang disiapkan" },
     ],
     operations: [
       { label: "Bahan baku", value: "Kopi Liberika dari petani Desa Klepu dengan jaringan pemasok yang sedang diperkuat" },
@@ -217,7 +217,7 @@ export const umkmList: Umkm[] = [
       { name: "Paket oleh-oleh herbal", investment: "Rp5–12 juta", detail: "Kotak isi teh kelor, secang, dan camilan desa." },
       { name: "Kebun kelor mitra", investment: "Rp6–12 juta", detail: "Penanaman kelor bersama warga agar pasokan bahan stabil." },
     ],
-    risks: ["Sumber bahan baku perlu ditingkatkan skalanya", "Perhitungan HPP perlu disempurnakan", "Legalitas dan masa simpan sedang diproses"],
+    risks: ["Sumber bahan baku sedang ditingkatkan skalanya", "Perhitungan HPP sedang disempurnakan", "Legalitas dan masa simpan sedang diproses"],
     mitigations: ["Pendataan pemasok", "Uji masa simpan", "Pendampingan izin", "Pencatatan biaya produksi"],
     prerequisites: ["Spesifikasi berat dan isi produk", "Kapasitas produksi", "Perhitungan HPP", "Dokumen izin edar"],
     description: "Secangker adalah minuman herbal yang menggabungkan khasiat daun kelor dan pohon secang dalam bentuk teh celup.",
@@ -282,7 +282,7 @@ export const umkmList: Umkm[] = [
       { label: "Penilaian kesiapan", value: "Siap bersyarat" },
     ],
     operations: [
-      { label: "Bahan baku", value: "Kedelai/tempe dari agen Sombro (terkonfirmasi)" },
+      { label: "Bahan baku", value: "Kedelai/tempe dari agen Sombro" },
       { label: "Pemakaian bahan", value: "4–4,5 kg per sekali produksi" },
       { label: "Kebutuhan alat", value: "Pemotong, peniris minyak, sealer, dan kemasan" },
       { label: "Kanal penjualan", value: "Toko titipan dan pembeli eceran" },
@@ -295,7 +295,7 @@ export const umkmList: Umkm[] = [
     ],
     gaps: ["Catatan keuangan usaha", "Data tenaga kerja", "Penawaran harga alat"],
     priority: "Prioritas 2 dari 8 peluang desa — produksi dan permintaan sudah terbentuk.",
-    potentials: ["POT-012 Kedelai/tempe — agen Sombro (terkonfirmasi)"],
+    potentials: ["POT-012 Kedelai/tempe — agen Sombro"],
   },
   {
     id: "UMKM-006",
@@ -333,7 +333,7 @@ export const umkmList: Umkm[] = [
       { label: "Penilaian kesiapan", value: "Dalam pengembangan aktif" },
     ],
     operations: [
-      { label: "Bahan baku", value: "Plastik anyaman dari pengrajin lokal (terkonfirmasi)" },
+      { label: "Bahan baku", value: "Plastik anyaman dari pengrajin lokal" },
       { label: "Kebutuhan", value: "Bahan, peralatan, pengembangan desain, dan kemasan" },
       { label: "Kanal penjualan", value: "Wisatawan, paket suvenir, dan penjualan lewat desa" },
       { label: "Potensi bahan lain", value: "Bambu dan kayu/mebel menjadi peluang bahan tambahan" },
