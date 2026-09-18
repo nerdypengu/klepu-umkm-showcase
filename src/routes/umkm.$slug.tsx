@@ -54,7 +54,7 @@ function UmkmDetailPage() {
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
                 <div className="rounded-2xl bg-background p-4"><p className="text-xs font-bold text-muted-foreground">Produk utama</p><p className="mt-1 font-semibold">{item.product}</p></div>
                 <div className="rounded-2xl bg-background p-4"><p className="text-xs font-bold text-muted-foreground">Pemilik / pengelola</p><p className="mt-1 font-semibold">{item.owner}</p></div>
-                <div className="rounded-2xl bg-background p-4 sm:col-span-2"><p className="flex items-center gap-2 text-xs font-bold text-muted-foreground"><MapPin className="size-3.5" /> Pasar yang dituju</p><p className="mt-1 leading-relaxed">{item.market}</p></div>
+                <div className="rounded-2xl bg-background p-4 sm:col-span-2"><p className="flex items-center gap-2 text-xs font-bold text-muted-foreground"><Target className="size-3.5" /> Pasar yang dituju</p><p className="mt-1 leading-relaxed">{item.market}</p></div>
               </div>
               <div className="mt-8 space-y-3">
                 {item.facts.map((fact) => (
