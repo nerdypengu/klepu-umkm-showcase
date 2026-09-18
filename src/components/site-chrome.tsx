@@ -16,7 +16,6 @@ export function SiteHeader() {
         <nav className="hidden items-center gap-1 text-sm font-semibold md:flex" aria-label="Navigasi utama">
           <Link to="/" hash="beranda" className="rounded-xl px-3 py-2 text-primary hover:bg-secondary">Beranda</Link>
           <Link to="/" hash="umkm" className="rounded-xl px-3 py-2 text-primary hover:bg-secondary">UMKM</Link>
-          <Link to="/" hash="potensi" className="rounded-xl px-3 py-2 text-primary hover:bg-secondary">Potensi</Link>
           <Button asChild variant="clay" size="sm" className="ml-2">
             <a href="https://klepu-sooko.desa.id/" target="_blank" rel="noreferrer">Desa Klepu <ArrowUpRight /></a>
           </Button>

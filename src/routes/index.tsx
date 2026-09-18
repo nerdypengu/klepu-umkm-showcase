@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { UmkmCard } from "@/components/umkm-card";
 import heroImage from "@/assets/klepu-hero.jpg";
-import { umkmList, widerOpportunities, type Category } from "@/lib/umkm-data";
+import { umkmList, type Category } from "@/lib/umkm-data";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
@@ -46,7 +46,7 @@ function HomePage() {
               </p>
               <div className="mt-7 flex flex-wrap gap-3">
                 <Button asChild variant="clay" size="lg"><Link to="/" hash="umkm">Lihat UMKM <ArrowRight /></Link></Button>
-                <Button asChild variant="outline" size="lg" className="h-11 rounded-2xl shadow-clay"><Link to="/" hash="potensi">Peta Potensi</Link></Button>
+                <Button asChild variant="outline" size="lg" className="h-11 rounded-2xl shadow-clay"><a href="https://klepu-sooko.desa.id/" target="_blank" rel="noreferrer">Website Desa</a></Button>
               </div>
               <div className="mt-9 grid max-w-xl grid-cols-2 gap-4 sm:grid-cols-3">
                 {[
@@ -89,22 +89,6 @@ function HomePage() {
           </div>
         </section>
 
-        <section id="potensi" className="scroll-mt-16 border-y border-border bg-card">
-          <div className="mx-auto max-w-6xl px-5 py-16 sm:px-6">
-            <p className="font-display text-xs font-bold uppercase text-primary">Potensi desa</p>
-            <h2 className="mt-2 font-display text-3xl font-extrabold sm:text-4xl">Peluang pengembangan berikutnya</h2>
-            <p className="mt-3 max-w-2xl leading-relaxed text-muted-foreground">Peluang dari sektor pangan, peternakan, dan hasil desa yang dapat dikembangkan bersama pelaku usaha lokal.</p>
-            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {widerOpportunities.map((opportunity) => (
-                <div key={opportunity.name} className="rounded-2xl border border-border bg-background p-5 shadow-clay">
-                  <p className="font-display text-lg font-bold">{opportunity.name}</p>
-                  <p className="mt-1 text-xs text-muted-foreground">{opportunity.status}</p>
-                  <p className="mt-5 font-display text-lg font-extrabold text-primary">{opportunity.investment}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
       </main>
       <SiteFooter />
     </div>
