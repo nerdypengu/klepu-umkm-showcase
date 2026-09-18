@@ -70,7 +70,7 @@ export const umkmList: Umkm[] = [
     summary: "Kopi Liberika rumahan dengan pasar wisata dan oleh-oleh yang sudah terbentuk.",
     image: kopiFamilyAsset.url,
     imageAlt: "Kemasan produk Kopi Family dari Desa Klepu",
-    activeStatus: "Aktif; verifikasi identitas",
+    activeStatus: "Aktif",
     ...coffeeShared,
     opportunities: coffeeOpportunities,
     facts: [
@@ -92,7 +92,7 @@ export const umkmList: Umkm[] = [
     summary: "Produk kopi lokal aktif yang berpeluang tumbuh melalui alat bersama dan kemasan yang lebih kuat.",
     image: kopiKrewengAsset.url,
     imageAlt: "Kemasan produk Kopi Kreweng dari Desa Klepu",
-    activeStatus: "Aktif; perlu verifikasi",
+    activeStatus: "Aktif",
     ...coffeeShared,
     opportunities: coffeeOpportunities,
     facts: [
