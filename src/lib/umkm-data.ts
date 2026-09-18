@@ -55,7 +55,14 @@ export interface Umkm {
   prerequisites: string[];
   facts: BusinessFact[];
   videos?: { src: string; poster: string }[];
+  description?: string;
+  price?: string;
+  whatsapp?: string;
+  mapsUrl?: string;
 }
+
+const LAPAK_WHATSAPP = "https://api.whatsapp.com/send?phone=+6281216022043";
+const LAPAK_MAPS = "https://www.google.com/maps?q=-7.922506701004813,111.65794009342791";
 
 const coffeeShared = {
   readiness: "Siap bersyarat",
@@ -89,6 +96,10 @@ export const umkmList: Umkm[] = [
     activeStatus: "Aktif",
     ...coffeeShared,
     opportunities: coffeeOpportunities,
+    description: "Kopi Family adalah kopi yang terbuat dari kopi liberika asli pegunungan Banyu Putih Klepu yang dirawat menggunakan pupuk organik. Tersedia kemasan 50 gram dan 150 gram.",
+    price: "Rp7.500 (50 g) · Rp17.000 (150 g)",
+    whatsapp: `${LAPAK_WHATSAPP}&text=Saya%20ingin%20membeli%20Kopi%20Family%20yang%20anda%20tawarkan%20di%20Lapak%20Desa`,
+    mapsUrl: LAPAK_MAPS,
     facts: [
       { label: "Harga produk", value: "Rp17.000 per 150 gram" },
       { label: "Penjualan", value: "15 kemasan per minggu" },
@@ -120,6 +131,10 @@ export const umkmList: Umkm[] = [
       { src: kreweng7015.url, poster: kreweng7015Poster.url },
       { src: kreweng7017.url, poster: kreweng7017Poster.url },
     ],
+    description: "Kopi Kreweng merupakan kopi yang diolah secara manual dari petik, pengupasan, pengeringan, bahkan digoreng menggunakan kreweng (wajan tanah liat). Berat: 200 gram.",
+    price: "Rp17.000 (200 g)",
+    whatsapp: `${LAPAK_WHATSAPP}&text=Saya%20ingin%20membeli%20Kopi%20Kreweng%20yang%20anda%20tawarkan%20di%20Lapak%20Desa`,
+    mapsUrl: LAPAK_MAPS,
     facts: [
       { label: "Komoditas", value: "Kopi Liberika Klepu" },
       { label: "Pemilik", value: "Binti Ziananingrum" },
@@ -140,6 +155,10 @@ export const umkmList: Umkm[] = [
     activeStatus: "Aktif",
     ...coffeeShared,
     opportunities: coffeeOpportunities,
+    description: "Kopi Fatima adalah kopi yang terbuat dari kopi berjenis liberika dan diproduksi secara murni tanpa campuran apapun. Berat: 200 gram.",
+    price: "Rp40.000 (200 g)",
+    whatsapp: `${LAPAK_WHATSAPP}&text=Saya%20ingin%20membeli%20Kopi%20Fatima%20yang%20anda%20tawarkan%20di%20Lapak%20Desa`,
+    mapsUrl: LAPAK_MAPS,
     facts: [
       { label: "Komoditas", value: "Kopi Liberika Klepu" },
       { label: "Status usaha", value: "Aktif" },
@@ -172,6 +191,10 @@ export const umkmList: Umkm[] = [
     risks: ["Sumber bahan belum tercatat", "HPP belum tersedia", "Legalitas dan masa simpan belum lengkap"],
     mitigations: ["Pendataan pemasok", "Uji masa simpan", "Pendampingan izin", "Pencatatan biaya produksi"],
     prerequisites: ["Berat dan isi produk", "Kapasitas produksi", "HPP", "Bukti izin"],
+    description: "Secangker adalah minuman herbal yang menggabungkan khasiat daun kelor dan pohon secang dalam bentuk teh celup.",
+    price: "Rp11.000",
+    whatsapp: `${LAPAK_WHATSAPP}&text=Saya%20ingin%20membeli%20Secangkir%20yang%20anda%20tawarkan%20di%20Lapak%20Desa`,
+    mapsUrl: LAPAK_MAPS,
     facts: [
       { label: "Harga", value: "Rp11.000" },
       { label: "Bahan", value: "Daun kelor dan kayu secang" },
@@ -238,6 +261,10 @@ export const umkmList: Umkm[] = [
     risks: ["Kapasitas belum diketahui", "Rincian bahan dan biaya belum tersedia", "Pasar belum terdokumentasi"],
     mitigations: ["Pendataan waktu kerja", "Katalog ukuran dan warna", "Kurasi suvenir", "Uji pasar wisata"],
     prerequisites: ["Profil pengrajin", "Kapasitas", "Biaya produksi", "Data pasar"],
+    description: "Tas anyaman plastik yang dibuat secara teliti sehingga menghasilkan produk yang elegan. Dibuat langsung oleh pengrajin.",
+    price: "Rp45.000",
+    whatsapp: `${LAPAK_WHATSAPP}&text=Saya%20ingin%20membeli%20Tas%20Anyaman%20Plastik%20yang%20anda%20tawarkan%20di%20Lapak%20Desa`,
+    mapsUrl: LAPAK_MAPS,
     facts: [
       { label: "Harga", value: "Rp45.000" },
       { label: "Pembuat", value: "Pengrajin lokal" },
