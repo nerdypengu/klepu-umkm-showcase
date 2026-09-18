@@ -88,7 +88,7 @@ function UmkmDetailPage() {
 
             <aside>
               <div className="sticky top-24 overflow-hidden rounded-[2rem] bg-background shadow-clay">
-                <div className="bg-primary px-6 py-5 text-primary-foreground"><p className="font-display text-xl font-bold">Ringkasan investasi</p><p className="mt-1 text-xs text-primary-foreground/65">Kisaran perencanaan, bukan harga final</p></div>
+                <div className="bg-primary px-6 py-5 text-primary-foreground"><p className="font-display text-xl font-bold">Ringkasan investasi</p><p className="mt-1 text-xs text-primary-foreground/65">Kisaran investasi awal</p></div>
                 <div className="p-6">
                   <p className="text-xs font-bold uppercase text-muted-foreground">Modal indikatif</p>
                   <p className="mt-1 font-display text-4xl font-extrabold text-primary">{item.investment}</p>
@@ -100,7 +100,7 @@ function UmkmDetailPage() {
                       {item.mapsUrl && <Button asChild variant="outline" size="sm"><a href={item.mapsUrl} target="_blank" rel="noreferrer"><MapPin /> Lokasi</a></Button>}
                     </div>
                   )}
-                  <p className="mt-3 text-center text-xs leading-relaxed text-muted-foreground">Kontak pemilik hanya dibagikan dengan persetujuan. Tidak ada jaminan hasil investasi.</p>
+                  <p className="mt-3 text-center text-xs leading-relaxed text-muted-foreground">Informasi investasi bersifat indikatif. Hubungi pemilik usaha untuk detail kerja sama.</p>
                 </div>
               </div>
             </aside>
@@ -109,9 +109,9 @@ function UmkmDetailPage() {
 
         <section className="mx-auto max-w-6xl px-5 py-16 sm:px-6">
           <div className="grid gap-6 lg:grid-cols-3">
-            <InfoList title="Risiko utama" icon={<CircleAlert />} items={item.risks} tone="caution" />
-            <InfoList title="Cara mengurangi risiko" icon={<Target />} items={item.mitigations} tone="green" />
-            <InfoList title="Syarat sebelum final" icon={<Check />} items={item.prerequisites} tone="neutral" />
+            <InfoList title="Tantangan yang diatasi" icon={<CircleAlert />} items={item.risks} tone="caution" />
+            <InfoList title="Solusi yang disiapkan" icon={<Target />} items={item.mitigations} tone="green" />
+            <InfoList title="Persiapan pengembangan" icon={<Check />} items={item.prerequisites} tone="neutral" />
           </div>
         </section>
 
@@ -133,7 +133,7 @@ function UmkmDetailPage() {
                 {item.gaps && item.gaps.length > 0 && (
                   <div className="rounded-[1.75rem] border border-border bg-card p-6">
                     <div className="grid size-10 place-items-center rounded-xl bg-muted text-foreground"><ListChecks /></div>
-                    <h2 className="mt-4 font-display text-xl font-bold">Data yang masih dilengkapi</h2>
+                    <h2 className="mt-4 font-display text-xl font-bold">Penguatan berikutnya</h2>
                     <ul className="mt-4 space-y-3">
                       {item.gaps.map((gap) => (
                         <li key={gap} className="flex gap-2 text-sm leading-relaxed text-muted-foreground"><span className="mt-2 size-1.5 shrink-0 rounded-full bg-primary" />{gap}</li>
