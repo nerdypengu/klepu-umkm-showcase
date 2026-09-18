@@ -51,6 +51,7 @@ function UmkmDetailPage() {
             <div>
               <p className="font-display text-xs font-bold uppercase text-primary">Profil usaha</p>
               <h2 className="mt-2 font-display text-3xl font-extrabold">Fakta yang sudah tersedia</h2>
+              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">Informasi berasal dari draf data Desa Klepu. Label pada setiap angka menunjukkan apakah data sudah tercatat, masih perlu diperiksa, berupa simulasi, atau rekomendasi.</p>
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
                 <div className="rounded-2xl bg-background p-4"><p className="text-xs font-bold text-muted-foreground">Produk utama</p><p className="mt-1 font-semibold">{item.product}</p></div>
                 <div className="rounded-2xl bg-background p-4"><p className="text-xs font-bold text-muted-foreground">Pemilik / pengelola</p><p className="mt-1 font-semibold">{item.owner}</p></div>
