@@ -115,6 +115,43 @@ function UmkmDetailPage() {
           </div>
         </section>
 
+        {(item.roles || item.gaps || item.priority) && (
+          <section className="mx-auto max-w-6xl px-5 pb-16 sm:px-6">
+            <div className="grid gap-6 lg:grid-cols-2">
+              {item.roles && item.roles.length > 0 && (
+                <div className="rounded-[1.75rem] border border-border bg-card p-6">
+                  <div className="grid size-10 place-items-center rounded-xl bg-secondary text-primary"><Users /></div>
+                  <h2 className="mt-4 font-display text-xl font-bold">Siapa yang menjalankan</h2>
+                  <div className="mt-4 space-y-3">
+                    {item.roles.map((role) => (
+                      <div key={role.label} className="rounded-2xl bg-background p-4"><p className="text-sm font-bold">{role.label}</p><p className="mt-1 text-sm leading-relaxed text-muted-foreground">{role.value}</p></div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              <div className="space-y-6">
+                {item.gaps && item.gaps.length > 0 && (
+                  <div className="rounded-[1.75rem] border border-border bg-card p-6">
+                    <div className="grid size-10 place-items-center rounded-xl bg-muted text-foreground"><ListChecks /></div>
+                    <h2 className="mt-4 font-display text-xl font-bold">Data yang masih dilengkapi</h2>
+                    <ul className="mt-4 space-y-3">
+                      {item.gaps.map((gap) => (
+                        <li key={gap} className="flex gap-2 text-sm leading-relaxed text-muted-foreground"><span className="mt-2 size-1.5 shrink-0 rounded-full bg-primary" />{gap}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {item.priority && (
+                  <div className="rounded-[1.75rem] bg-primary p-6 text-primary-foreground">
+                    <h2 className="font-display text-xl font-bold">Urutan pengembangan desa</h2>
+                    <p className="mt-3 leading-relaxed text-primary-foreground/85">{item.priority}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </section>
+        )}
+
         {item.videos && item.videos.length > 0 && (
           <section className="border-y border-border bg-card">
             <div className="mx-auto max-w-6xl px-5 py-14 sm:px-6">
