@@ -114,7 +114,27 @@ function UmkmDetailPage() {
           </div>
         </section>
 
+        <section className="mx-auto max-w-6xl px-5 pt-16 sm:px-6">
+          <div className="rounded-[1.75rem] border border-border bg-card p-6 shadow-clay sm:p-8">
+            <p className="font-display text-xs font-bold uppercase text-primary">Rekomendasi target pasar</p>
+            <h2 className="mt-2 font-display text-3xl font-extrabold">Pasar yang paling menjanjikan</h2>
+            <p className="mt-3 max-w-3xl leading-relaxed text-muted-foreground">{item.market}</p>
+            {item.marketTargets && item.marketTargets.length > 0 && (
+              <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                {item.marketTargets.map((target) => (
+                  <div key={target} className="flex items-start gap-3 rounded-2xl bg-background p-4">
+                    <div className="grid size-9 shrink-0 place-items-center rounded-xl bg-secondary text-primary"><Target className="size-5" /></div>
+                    <p className="text-sm font-semibold leading-relaxed">{target}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+            {item.marketNote && <p className="mt-5 max-w-3xl text-sm leading-relaxed text-muted-foreground">{item.marketNote}</p>}
+          </div>
+        </section>
+
         <section className="mx-auto max-w-6xl px-5 py-16 sm:px-6">
+
           <div className="grid gap-6 lg:grid-cols-3">
             <InfoList title="Tantangan yang diatasi" icon={<CircleAlert />} items={item.risks} tone="caution" />
             <InfoList title="Solusi yang disiapkan" icon={<Target />} items={item.mitigations} tone="green" />
@@ -212,26 +232,31 @@ function UmkmDetailPage() {
             <p className="mt-3 max-w-2xl leading-relaxed text-muted-foreground">{item.opportunityContext}</p>
             <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {item.opportunities.map((opportunity) => (
-                <div key={opportunity.name} className="flex flex-col rounded-2xl border border-border bg-background p-5 shadow-clay">
+                <div key={opportunity.name} className={`relative flex flex-col rounded-2xl border p-5 shadow-clay ${opportunity.recommended ? "border-primary bg-secondary" : "border-border bg-background"}`}>
+                  {opportunity.recommended && (
+                    <span className="mb-3 inline-flex w-fit items-center gap-1.5 rounded-full bg-primary px-3 py-1 text-xs font-bold text-primary-foreground"><Sparkles className="size-3.5" /> Direkomendasikan</span>
+                  )}
                   <p className="font-display text-lg font-bold leading-tight">{opportunity.name}</p>
                   <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{opportunity.detail}</p>
+                  {opportunity.recommendedReason && <p className="mt-3 text-xs font-semibold leading-relaxed text-primary">{opportunity.recommendedReason}</p>}
                   <p className="mt-5 font-display text-lg font-extrabold text-primary">{opportunity.investment}</p>
                 </div>
               ))}
             </div>
             <div className="mt-10">
               <h3 className="font-display text-2xl font-extrabold">Perbandingan kebutuhan modal</h3>
-              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">Kisaran modal tiap peluang dibanding modal usaha inti.</p>
+              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">Porsi modal usaha inti dibanding tiap peluang pengembangan.</p>
               <div className="mt-5">
-                <InvestmentChart
-                  rows={[
+                <InvestmentPie
+                  slices={[
                     { label: `${item.name} (usaha inti)`, value: item.investment, highlight: true },
                     ...item.opportunities.map((opportunity) => ({ label: opportunity.name, value: opportunity.investment })),
                   ]}
-                  caption="Nilai dalam juta rupiah dan bersifat indikatif."
+                  caption="Nilai memakai titik tengah kisaran modal dalam juta rupiah dan bersifat indikatif."
                 />
               </div>
             </div>
+
           </div>
         </section>
 
