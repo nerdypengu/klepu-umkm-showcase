@@ -3,6 +3,22 @@ import kopiKrewengAsset from "@/assets/kopi-kreweng.jpg.asset.json";
 import kopiFatimaAsset from "@/assets/kopi-fatima.jpg.asset.json";
 import secangkirAsset from "@/assets/secangkir.jpg.asset.json";
 import tasAnyamanAsset from "@/assets/tas-anyaman.jpg.asset.json";
+import kreweng7009 from "@/assets/kreweng-7009.mp4.asset.json";
+import kreweng7010 from "@/assets/kreweng-7010.mp4.asset.json";
+import kreweng7011 from "@/assets/kreweng-7011.mp4.asset.json";
+import kreweng7012 from "@/assets/kreweng-7012.mp4.asset.json";
+import kreweng7013 from "@/assets/kreweng-7013.mp4.asset.json";
+import kreweng7014 from "@/assets/kreweng-7014.mp4.asset.json";
+import kreweng7015 from "@/assets/kreweng-7015.mp4.asset.json";
+import kreweng7017 from "@/assets/kreweng-7017.mp4.asset.json";
+import kreweng7009Poster from "@/assets/kreweng-7009-poster.jpg.asset.json";
+import kreweng7010Poster from "@/assets/kreweng-7010-poster.jpg.asset.json";
+import kreweng7011Poster from "@/assets/kreweng-7011-poster.jpg.asset.json";
+import kreweng7012Poster from "@/assets/kreweng-7012-poster.jpg.asset.json";
+import kreweng7013Poster from "@/assets/kreweng-7013-poster.jpg.asset.json";
+import kreweng7014Poster from "@/assets/kreweng-7014-poster.jpg.asset.json";
+import kreweng7015Poster from "@/assets/kreweng-7015-poster.jpg.asset.json";
+import kreweng7017Poster from "@/assets/kreweng-7017-poster.jpg.asset.json";
 import heroImage from "@/assets/klepu-hero.jpg";
 
 export type Category = "Kopi" | "Herbal" | "Makanan" | "Kerajinan" | "Kuliner";
@@ -39,6 +55,7 @@ export interface Umkm {
   mitigations: string[];
   prerequisites: string[];
   facts: BusinessFact[];
+  videos?: { src: string; poster: string }[];
 }
 
 const coffeeShared = {
@@ -70,7 +87,7 @@ export const umkmList: Umkm[] = [
     summary: "Kopi Liberika rumahan dengan pasar wisata dan oleh-oleh yang sudah terbentuk.",
     image: kopiFamilyAsset.url,
     imageAlt: "Kemasan produk Kopi Family dari Desa Klepu",
-    activeStatus: "Aktif; verifikasi identitas",
+    activeStatus: "Aktif",
     ...coffeeShared,
     opportunities: coffeeOpportunities,
     facts: [
@@ -92,9 +109,19 @@ export const umkmList: Umkm[] = [
     summary: "Produk kopi lokal aktif yang berpeluang tumbuh melalui alat bersama dan kemasan yang lebih kuat.",
     image: kopiKrewengAsset.url,
     imageAlt: "Kemasan produk Kopi Kreweng dari Desa Klepu",
-    activeStatus: "Aktif; perlu verifikasi",
+    activeStatus: "Aktif",
     ...coffeeShared,
     opportunities: coffeeOpportunities,
+    videos: [
+      { src: kreweng7009.url, poster: kreweng7009Poster.url },
+      { src: kreweng7010.url, poster: kreweng7010Poster.url },
+      { src: kreweng7011.url, poster: kreweng7011Poster.url },
+      { src: kreweng7012.url, poster: kreweng7012Poster.url },
+      { src: kreweng7013.url, poster: kreweng7013Poster.url },
+      { src: kreweng7014.url, poster: kreweng7014Poster.url },
+      { src: kreweng7015.url, poster: kreweng7015Poster.url },
+      { src: kreweng7017.url, poster: kreweng7017Poster.url },
+    ],
     facts: [
       { label: "Komoditas", value: "Kopi Liberika Klepu" },
       { label: "Pemilik", value: "Binti Ziananingrum menurut katalog" },

@@ -86,6 +86,21 @@ function UmkmDetailPage() {
           </div>
         </section>
 
+        {item.videos && item.videos.length > 0 && (
+          <section className="border-y border-border bg-card">
+            <div className="mx-auto max-w-6xl px-5 py-14 sm:px-6">
+              <p className="font-display text-xs font-bold uppercase text-primary">Galeri</p>
+              <h2 className="mt-2 font-display text-3xl font-extrabold sm:text-4xl">Video {item.name}</h2>
+              <p className="mt-3 max-w-2xl leading-relaxed text-muted-foreground">Dokumentasi produk dan proses usaha {item.name}.</p>
+              <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                {item.videos.map((video, index) => (
+                  <video key={video.src} src={video.src} poster={video.poster} controls preload="none" playsInline className="aspect-[3/4] w-full rounded-2xl border border-border bg-muted object-cover shadow-clay" aria-label={`Video ${item.name} ${index + 1}`} />
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
         <section className="border-y border-border bg-card">
           <div className="mx-auto max-w-6xl px-5 py-14 sm:px-6">
             <p className="font-display text-xs font-bold uppercase text-primary">Peluang produk</p>
