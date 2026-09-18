@@ -61,6 +61,7 @@ export interface Umkm {
   priorityTotal?: number;
   prioritySummary?: string;
   potentials?: string[];
+  roiSimulation?: { roi: string; payback: string; basis: string };
   videos?: { src: string; poster: string }[];
   description?: string;
   price?: string;
@@ -97,6 +98,11 @@ const coffeeShared = {
   priorityTotal: 8,
   prioritySummary: "Produk dan pasarnya sudah tersedia.",
   potentials: ["POT-001 Kopi Liberika — kebun Klepu / Banyu Putih"],
+  roiSimulation: {
+    roi: "±35–45% per tahun",
+    payback: "±2–2,5 tahun",
+    basis: "Simulasi dari harga jual kopi kemasan, kapasitas sangrai mesin, dan permintaan pasar oleh-oleh serta kanal daring.",
+  },
 };
 
 const coffeeOpportunities: Opportunity[] = [
