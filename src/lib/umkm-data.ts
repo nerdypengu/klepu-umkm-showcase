@@ -122,11 +122,20 @@ export const umkmList: Umkm[] = [
     mapsUrl: LAPAK_MAPS,
     facts: [
       { label: "Harga produk", value: "Rp17.000 per 150 gram" },
-      { label: "Penjualan", value: "15 kemasan per minggu" },
+      { label: "Penjualan", value: "15 kemasan per minggu (sekitar 65 kemasan per bulan)" },
+      { label: "Pesanan terbesar", value: "30 kemasan dalam satu pemesanan" },
       { label: "Tenaga kerja", value: "5 orang" },
       { label: "Tempat produksi", value: "Rumah tangga" },
-      { label: "Proses produksi", value: "Sekitar 3 hari" },
+      { label: "Proses produksi", value: "Sekitar 3 hari per siklus" },
       { label: "Digital", value: "WhatsApp dan Shopee; tautan belum dicatat" },
+    ],
+    operations: [
+      { label: "Bahan baku", value: "Kopi Liberika dari petani Desa Klepu; nama pemasok dan volume masih didata" },
+      { label: "Mesin yang sudah dimiliki", value: "Mesin pengupas dan pembersih kulit kopi" },
+      { label: "Kebutuhan alat", value: "Mesin sangrai dan pelatihan penggunaannya" },
+      { label: "Distribusi", value: "Diantar sendiri dengan kendaraan milik usaha" },
+      { label: "Kanal penjualan", value: "Wisatawan, toko, kios Goa Maria, dan pusat oleh-oleh" },
+      { label: "Legalitas", value: "NIB dinyatakan tersedia; dokumen masih perlu ditunjukkan" },
     ],
   },
   {
