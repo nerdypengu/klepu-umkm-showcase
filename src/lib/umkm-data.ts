@@ -78,6 +78,21 @@ const coffeeShared = {
   risks: ["Kontinuitas pasokan kopi", "Konsistensi mutu sangrai", "Perubahan harga dan penjualan"],
   mitigations: ["Pemasok tetap", "SOP produksi", "Komitmen pembelian", "Diversifikasi produk"],
   prerequisites: ["HPP terverifikasi", "Catatan penjualan", "Dokumen izin", "Penawaran harga alat"],
+  operations: [
+    { label: "Bahan baku", value: "Kopi Liberika dari petani Desa Klepu (nama pemasok dan volume masih didata)" },
+    { label: "Kebutuhan alat", value: "Mesin sangrai (roaster), grinder, sealer, dan kemasan" },
+    { label: "Model investasi", value: "Alat bersama antar-UMKM kopi atau pembiayaan bertahap" },
+    { label: "Kanal penjualan", value: "Toko, kios Goa Maria, pusat oleh-oleh, dan pemesanan langsung" },
+    { label: "Legalitas", value: "Status izin masih dalam pemeriksaan dokumen" },
+  ],
+  roles: [
+    { label: "Pelaksana utama", value: "UMKM kopi bersama petani kopi Klepu" },
+    { label: "Pokdarwis Jayandaru", value: "Promosi lewat jalur wisata desa" },
+    { label: "BUMDes / Pemerintah Desa", value: "Pengadaan mesin bersama dan fasilitasi" },
+  ],
+  gaps: ["HPP per kemasan", "Catatan penjualan historis", "Bukti dokumen izin", "Data volume pasokan kopi"],
+  priority: "Prioritas 1 dari 8 peluang desa — produk dan pasarnya sudah tersedia.",
+  potentials: ["POT-001 Kopi Liberika — kebun Klepu / Banyu Putih (terkonfirmasi sebagian)"],
 };
 
 const coffeeOpportunities: Opportunity[] = [
