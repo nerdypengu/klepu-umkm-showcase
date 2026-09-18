@@ -30,6 +30,7 @@ export interface Umkm {
   investmentStatus: EvidenceStatus;
   investmentUse: string[];
   market: string;
+  opportunityContext: string;
   risks: string[];
   mitigations: string[];
   prerequisites: string[];
