@@ -23,8 +23,15 @@ export const Route = createFileRoute("/umkm/$slug")({
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: loaderData?.item ? `${loaderData.item.name} — Potensi UMKM ${loaderData.item.category} Klepu` : "UMKM Tidak Ditemukan" },
       { name: "twitter:description", content: loaderData?.item.summary ?? "Profil UMKM Desa Klepu tidak ditemukan." },
+      ...(loaderData?.item.image?.startsWith("https://")
+        ? [
+            { property: "og:image", content: loaderData.item.image },
+            { name: "twitter:image", content: loaderData.item.image },
+          ]
+        : []),
     ],
   }),
+  errorComponent: () => <div className="p-10 text-center">Data UMKM belum dapat dimuat. Coba muat ulang halaman.</div>,
   notFoundComponent: UmkmNotFound,
   component: UmkmDetailPage,
 });
