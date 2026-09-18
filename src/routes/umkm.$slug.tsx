@@ -77,11 +77,14 @@ function UmkmDetailPage() {
               {item.potentials && item.potentials.length > 0 && (
                 <div className="mt-10">
                   <h3 className="font-display text-2xl font-extrabold">Potensi desa yang menopang</h3>
-                  <ul className="mt-5 space-y-2">
+                  <div className="mt-5 grid gap-3 sm:grid-cols-2">
                     {item.potentials.map((potential) => (
-                      <li key={potential} className="flex gap-2 rounded-2xl bg-background p-4 text-sm leading-relaxed text-muted-foreground"><Sprout className="mt-0.5 size-4 shrink-0 text-primary" />{potential}</li>
+                      <div key={potential} className="flex items-start gap-3 rounded-2xl border border-border bg-secondary p-4">
+                        <div className="grid size-9 shrink-0 place-items-center rounded-xl bg-background text-primary"><Sprout className="size-5" /></div>
+                        <p className="text-sm font-semibold leading-relaxed text-secondary-foreground">{potential}</p>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
                 </div>
               )}
             </div>
@@ -115,8 +118,24 @@ function UmkmDetailPage() {
           </div>
         </section>
 
-        {(item.roles || item.gaps || item.priority) && (
+        {(item.roles || item.gaps || typeof item.priorityRank === "number") && (
           <section className="mx-auto max-w-6xl px-5 pb-16 sm:px-6">
+            {typeof item.priorityRank === "number" && item.priorityTotal && (
+              <div className="mb-6 rounded-[1.75rem] bg-primary p-6 text-primary-foreground shadow-clay-dark sm:p-8">
+                <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <p className="text-xs font-bold uppercase text-primary-foreground/70">Urutan pengembangan desa</p>
+                    <p className="mt-2 font-display text-2xl font-bold">Prioritas {item.priorityRank} dari {item.priorityTotal} peluang desa</p>
+                    <p className="mt-2 max-w-2xl leading-relaxed text-primary-foreground/85">{item.prioritySummary}</p>
+                  </div>
+                  <div className="flex items-baseline gap-1 rounded-2xl bg-primary-foreground/10 px-6 py-4 text-primary-foreground">
+                    <span className="font-display text-6xl font-extrabold">{item.priorityRank}</span>
+                    <span className="text-2xl font-semibold opacity-75">/</span>
+                    <span className="text-2xl font-semibold opacity-75">{item.priorityTotal}</span>
+                  </div>
+                </div>
+              </div>
+            )}
             <div className="grid gap-6 lg:grid-cols-2">
               {item.roles && item.roles.length > 0 && (
                 <div className="rounded-[1.75rem] border border-border bg-card p-6">
@@ -129,25 +148,17 @@ function UmkmDetailPage() {
                   </div>
                 </div>
               )}
-              <div className="space-y-6">
-                {item.gaps && item.gaps.length > 0 && (
-                  <div className="rounded-[1.75rem] border border-border bg-card p-6">
-                    <div className="grid size-10 place-items-center rounded-xl bg-muted text-foreground"><ListChecks /></div>
-                    <h2 className="mt-4 font-display text-xl font-bold">Penguatan berikutnya</h2>
-                    <ul className="mt-4 space-y-3">
-                      {item.gaps.map((gap) => (
-                        <li key={gap} className="flex gap-2 text-sm leading-relaxed text-muted-foreground"><span className="mt-2 size-1.5 shrink-0 rounded-full bg-primary" />{gap}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                {item.priority && (
-                  <div className="rounded-[1.75rem] bg-primary p-6 text-primary-foreground">
-                    <h2 className="font-display text-xl font-bold">Urutan pengembangan desa</h2>
-                    <p className="mt-3 leading-relaxed text-primary-foreground/85">{item.priority}</p>
-                  </div>
-                )}
-              </div>
+              {item.gaps && item.gaps.length > 0 && (
+                <div className="rounded-[1.75rem] border border-border bg-card p-6">
+                  <div className="grid size-10 place-items-center rounded-xl bg-muted text-foreground"><ListChecks /></div>
+                  <h2 className="mt-4 font-display text-xl font-bold">Penguatan berikutnya</h2>
+                  <ul className="mt-4 space-y-3">
+                    {item.gaps.map((gap) => (
+                      <li key={gap} className="flex gap-2 text-sm leading-relaxed text-muted-foreground"><span className="mt-2 size-1.5 shrink-0 rounded-full bg-primary" />{gap}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           </section>
         )}
