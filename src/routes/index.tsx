@@ -70,7 +70,7 @@ function HomePage() {
             <div>
               <p className="font-display text-xs font-bold uppercase text-primary">Lapak Desa</p>
               <h2 className="mt-1 font-display text-3xl font-extrabold sm:text-4xl">Pilih UMKM, lihat potensinya</h2>
-              <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">Setiap profil memisahkan fakta, data yang perlu diperiksa, dan rekomendasi investasi.</p>
+              <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">Setiap profil memuat fakta usaha, kebutuhan modal, serta peluang pengembangan produknya.</p>
             </div>
             <div className="flex flex-wrap gap-2" role="group" aria-label="Filter kategori UMKM">
               {categories.map((item) => (
@@ -85,6 +85,68 @@ function HomePage() {
 
       </main>
       <SiteFooter />
+    </div>
+  );
+}
+
+const slides = [
+  { image: heroImage, alt: "Ragam produk unggulan Desa Klepu", title: "Produk Desa Klepu", note: "Tujuh UMKM aktif" },
+  ...umkmList
+    .filter((item, index, all) => all.findIndex((other) => other.image === item.image) === index && item.image !== heroImage)
+    .map((item) => ({ image: item.image, alt: item.imageAlt, title: item.name, note: `Indikatif ${item.investment}` })),
+];
+
+function HeroCarousel() {
+  const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (media.matches) return;
+    const timer = window.setInterval(() => setActive((current) => (current + 1) % slides.length), 4500);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const go = (step: number) => setActive((current) => (current + step + slides.length) % slides.length);
+  const current = slides[active]!;
+
+  return (
+    <div className="relative pb-4">
+      <div className="relative aspect-[6/5] w-full overflow-hidden rounded-[2.5rem] shadow-[0_18px_0_var(--shadow-soft)]" aria-roledescription="carousel" aria-label="Galeri produk Desa Klepu">
+        {slides.map((slide, index) => (
+          <img
+            key={slide.title}
+            src={slide.image}
+            alt={slide.alt}
+            width={1200}
+            height={1000}
+            fetchPriority={index === 0 ? "high" : "low"}
+            className={cn("absolute inset-0 size-full object-cover transition-opacity duration-700 motion-reduce:transition-none", index === active ? "opacity-100" : "opacity-0")}
+            aria-hidden={index === active ? undefined : true}
+          />
+        ))}
+        <button type="button" onClick={() => go(-1)} aria-label="Gambar sebelumnya" className="absolute left-3 top-1/2 grid size-10 -translate-y-1/2 place-items-center rounded-full bg-card/90 text-foreground shadow-clay transition hover:bg-card">
+          <ChevronLeft className="size-5" />
+        </button>
+        <button type="button" onClick={() => go(1)} aria-label="Gambar berikutnya" className="absolute right-3 top-1/2 grid size-10 -translate-y-1/2 place-items-center rounded-full bg-card/90 text-foreground shadow-clay transition hover:bg-card">
+          <ChevronRight className="size-5" />
+        </button>
+        <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2">
+          {slides.map((slide, index) => (
+            <button
+              key={slide.title}
+              type="button"
+              onClick={() => setActive(index)}
+              aria-label={`Tampilkan ${slide.title}`}
+              aria-current={index === active}
+              className={cn("h-2 rounded-full bg-card/70 transition-all", index === active ? "w-6 bg-card" : "w-2")}
+            />
+          ))}
+        </div>
+      </div>
+      <div className="absolute -bottom-1 left-2 -rotate-2 rounded-2xl bg-accent px-4 py-3 shadow-clay-dark sm:-left-4">
+        <p className="font-display text-sm font-bold text-accent-foreground">{current.title}</p>
+        <p className="text-[11px] text-accent-foreground/70">{current.note}</p>
+      </div>
     </div>
   );
 }
