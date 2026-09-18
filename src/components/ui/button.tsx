@@ -1,3 +1,8 @@
+@@
+       variant: {
+         default: "bg-primary text-primary-foreground shadow hover:bg-primary/90",
++        clay: "rounded-2xl bg-primary text-primary-foreground shadow-clay-dark hover:-translate-y-0.5 active:translate-y-1 active:shadow-none",
+         destructive: "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
