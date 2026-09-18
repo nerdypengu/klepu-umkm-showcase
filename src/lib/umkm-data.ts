@@ -54,6 +54,11 @@ export interface Umkm {
   mitigations: string[];
   prerequisites: string[];
   facts: BusinessFact[];
+  operations?: BusinessFact[];
+  roles?: BusinessFact[];
+  gaps?: string[];
+  priority?: string;
+  potentials?: string[];
   videos?: { src: string; poster: string }[];
   description?: string;
   price?: string;
