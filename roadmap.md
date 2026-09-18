@@ -5,3 +5,4 @@
 - [x] Build seven UMKM investment detail pages
 - [x] Add accurate metadata and responsive behavior
 - [x] Verify desktop, mobile, links, and error states
+- [ ] Pindahkan data & aset UMKM ke backend (menunggu keputusan: Lovable Cloud bawaan vs Supabase milik user)
