@@ -4,24 +4,25 @@ import { Button } from "@/components/ui/button";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { InvestmentPie } from "@/components/investment-pie";
 import { InvestmentScoreCard } from "@/components/investment-score";
-import { getUmkm, umkmList } from "@/lib/umkm-data";
+import { fetchUmkmList } from "@/lib/umkm.functions";
 
 export const Route = createFileRoute("/umkm/$slug")({
-  loader: ({ params }) => {
-    const item = getUmkm(params.slug);
+  loader: async ({ params }) => {
+    const list = await fetchUmkmList();
+    const item = list.find((candidate) => candidate.slug === params.slug);
     if (!item) throw notFound();
-    return item;
+    return { item, related: list.filter((candidate) => candidate.slug !== item.slug).slice(0, 3) };
   },
   head: ({ loaderData }) => ({
     meta: [
-      { title: loaderData ? `${loaderData.name} (${loaderData.category}) — Potensi & Investasi Desa Klepu` : "UMKM Tidak Ditemukan — Desa Klepu" },
-      { name: "description", content: loaderData ? `${loaderData.name}: ${loaderData.summary} Kebutuhan modal indikatif ${loaderData.investment}. Pelajari fakta usaha & analisa pasarnya.` : "Profil UMKM Desa Klepu tidak ditemukan." },
-      { property: "og:title", content: loaderData ? `${loaderData.name} — Peluang Investasi Produk ${loaderData.category}` : "UMKM Tidak Ditemukan" },
-      { property: "og:description", content: loaderData ? `${loaderData.summary} Indikasi modal: ${loaderData.investment}. Temukan detail lengkapnya di Showcase UMKM Desa Klepu.` : "Profil UMKM Desa Klepu tidak ditemukan." },
+      { title: loaderData?.item ? `${loaderData.item.name} (${loaderData.item.category}) — Potensi & Investasi Desa Klepu` : "UMKM Tidak Ditemukan — Desa Klepu" },
+      { name: "description", content: loaderData?.item ? `${loaderData.item.name}: ${loaderData.item.summary} Kebutuhan modal indikatif ${loaderData.item.investment}. Pelajari fakta usaha & analisa pasarnya.` : "Profil UMKM Desa Klepu tidak ditemukan." },
+      { property: "og:title", content: loaderData?.item ? `${loaderData.item.name} — Peluang Investasi Produk ${loaderData.item.category}` : "UMKM Tidak Ditemukan" },
+      { property: "og:description", content: loaderData?.item ? `${loaderData.item.summary} Indikasi modal: ${loaderData.item.investment}. Temukan detail lengkapnya di Showcase UMKM Desa Klepu.` : "Profil UMKM Desa Klepu tidak ditemukan." },
       { property: "og:type", content: "article" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: loaderData ? `${loaderData.name} — Potensi UMKM ${loaderData.category} Klepu` : "UMKM Tidak Ditemukan" },
-      { name: "twitter:description", content: loaderData?.summary ?? "Profil UMKM Desa Klepu tidak ditemukan." },
+      { name: "twitter:title", content: loaderData?.item ? `${loaderData.item.name} — Potensi UMKM ${loaderData.item.category} Klepu` : "UMKM Tidak Ditemukan" },
+      { name: "twitter:description", content: loaderData?.item.summary ?? "Profil UMKM Desa Klepu tidak ditemukan." },
     ],
   }),
   notFoundComponent: UmkmNotFound,
@@ -29,8 +30,7 @@ export const Route = createFileRoute("/umkm/$slug")({
 });
 
 function UmkmDetailPage() {
-  const item = Route.useLoaderData();
-  const related = umkmList.filter((candidate) => candidate.slug !== item.slug).slice(0, 3);
+  const { item, related } = Route.useLoaderData();
 
   return (
     <div className="min-h-screen bg-background">
