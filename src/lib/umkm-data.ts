@@ -248,7 +248,9 @@ export const umkmList: Umkm[] = [
       { label: "BUMDes / Pemerintah Desa", value: "Pendampingan pengurusan izin" },
     ],
     gaps: ["Kapasitas produksi", "Dokumen izin", "Komposisi dan masa simpan", "Data pasar"],
-    priority: "Prioritas 4 dari 8 peluang desa — produksi dan legalitas sedang disempurnakan.",
+    priorityRank: 4,
+    priorityTotal: 8,
+    prioritySummary: "Produksi dan legalitas sedang disempurnakan.",
     potentials: ["POT-010 Daun kelor — bahan tersedia", "POT-011 Kayu secang — bahan tersedia"],
   },
   {
@@ -298,7 +300,9 @@ export const umkmList: Umkm[] = [
       { label: "BUMDes / Pemerintah Desa", value: "Distribusi, bantuan alat, dan pengurusan izin" },
     ],
     gaps: ["Catatan keuangan usaha", "Data tenaga kerja", "Penawaran harga alat"],
-    priority: "Prioritas 2 dari 8 peluang desa — produksi dan permintaan sudah terbentuk.",
+    priorityRank: 2,
+    priorityTotal: 8,
+    prioritySummary: "Produksi dan permintaan sudah terbentuk.",
     potentials: ["POT-012 Kedelai/tempe — agen Sombro"],
   },
   {
@@ -348,7 +352,9 @@ export const umkmList: Umkm[] = [
       { label: "BUMDes / Pemerintah Desa", value: "Membantu penjualan dan pemasaran" },
     ],
     gaps: ["Profil dan jumlah pengrajin", "Kapasitas produksi", "Rincian biaya produksi", "Data pasar"],
-    priority: "Prioritas 7 dari 8 peluang desa — kapasitas produksi sedang dipetakan.",
+    priorityRank: 7,
+    priorityTotal: 8,
+    prioritySummary: "Kapasitas produksi sedang dipetakan.",
     potentials: ["POT-014 Plastik anyaman — pengrajin lokal", "POT-015 Bambu dan POT-016 kayu/mebel — peluang bahan"],
   },
   {
@@ -395,7 +401,9 @@ export const umkmList: Umkm[] = [
       { label: "BUMDes / Pemerintah Desa", value: "Pengelolaan gerai dan tata kelola" },
     ],
     gaps: ["Identitas pemilik dan pengelola", "Daftar produk dan harga", "Kapasitas layanan", "Kebutuhan dana"],
-    priority: "Terkait prioritas 5 dari 8 peluang desa — paket wisata dan oleh-oleh dengan penyusunan SOP.",
+    priorityRank: 5,
+    priorityTotal: 8,
+    prioritySummary: "Paket wisata dan oleh-oleh dengan penyusunan SOP.",
     potentials: ["POT-017 Desa wisata — Pokdarwis Jayandaru"],
   },
 ];
