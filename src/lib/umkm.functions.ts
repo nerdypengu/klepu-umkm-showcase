@@ -11,9 +11,12 @@ export const fetchUmkmList = createServerFn({ method: "GET" }).handler(async ():
   const key = process.env["EXT_SUPABASE_ANON_KEY"];
   if (!key) throw new Error("EXT_SUPABASE_ANON_KEY is not configured");
 
+  const headers: Record<string, string> = { apikey: key };
+  if (!key.startsWith("sb_")) headers["Authorization"] = `Bearer ${key}`;
+
   const response = await fetch(
     `${restBase()}/rest/v1/umkm?select=data,sort_order&order=sort_order.asc`,
-    { headers: { apikey: key, Authorization: `Bearer ${key}` } },
+    { headers },
   );
 
   if (!response.ok) {
