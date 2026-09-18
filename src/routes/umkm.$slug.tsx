@@ -88,14 +88,14 @@ function UmkmDetailPage() {
 
         <section className="border-y border-border bg-card">
           <div className="mx-auto max-w-6xl px-5 py-14 sm:px-6">
-            <p className="font-display text-xs font-bold uppercase text-primary">Peluang desa</p>
-            <h2 className="mt-2 font-display text-3xl font-extrabold sm:text-4xl">Peluang pengembangan terkait</h2>
+            <p className="font-display text-xs font-bold uppercase text-primary">Peluang produk</p>
+            <h2 className="mt-2 font-display text-3xl font-extrabold sm:text-4xl">Peluang pengembangan {item.product}</h2>
             <p className="mt-3 max-w-2xl leading-relaxed text-muted-foreground">{item.opportunityContext}</p>
             <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {widerOpportunities.map((opportunity) => (
-                <div key={opportunity.name} className="rounded-2xl border border-border bg-background p-5 shadow-clay">
-                  <p className="font-display text-lg font-bold">{opportunity.name}</p>
-                  <p className="mt-1 text-xs text-muted-foreground">{opportunity.status}</p>
+              {item.opportunities.map((opportunity) => (
+                <div key={opportunity.name} className="flex flex-col rounded-2xl border border-border bg-background p-5 shadow-clay">
+                  <p className="font-display text-lg font-bold leading-tight">{opportunity.name}</p>
+                  <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{opportunity.detail}</p>
                   <p className="mt-5 font-display text-lg font-extrabold text-primary">{opportunity.investment}</p>
                 </div>
               ))}
