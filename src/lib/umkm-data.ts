@@ -3,6 +3,14 @@ import kopiKrewengAsset from "@/assets/kopi-kreweng.jpg.asset.json";
 import kopiFatimaAsset from "@/assets/kopi-fatima.jpg.asset.json";
 import secangkirAsset from "@/assets/secangkir.jpg.asset.json";
 import tasAnyamanAsset from "@/assets/tas-anyaman.jpg.asset.json";
+import kreweng7009 from "@/assets/kreweng-7009.mp4.asset.json";
+import kreweng7010 from "@/assets/kreweng-7010.mp4.asset.json";
+import kreweng7011 from "@/assets/kreweng-7011.mp4.asset.json";
+import kreweng7012 from "@/assets/kreweng-7012.mp4.asset.json";
+import kreweng7013 from "@/assets/kreweng-7013.mp4.asset.json";
+import kreweng7014 from "@/assets/kreweng-7014.mp4.asset.json";
+import kreweng7015 from "@/assets/kreweng-7015.mp4.asset.json";
+import kreweng7017 from "@/assets/kreweng-7017.mp4.asset.json";
 import heroImage from "@/assets/klepu-hero.jpg";
 
 export type Category = "Kopi" | "Herbal" | "Makanan" | "Kerajinan" | "Kuliner";
@@ -39,6 +47,7 @@ export interface Umkm {
   mitigations: string[];
   prerequisites: string[];
   facts: BusinessFact[];
+  videos?: string[];
 }
 
 const coffeeShared = {
@@ -95,6 +104,7 @@ export const umkmList: Umkm[] = [
     activeStatus: "Aktif",
     ...coffeeShared,
     opportunities: coffeeOpportunities,
+    videos: [kreweng7009.url, kreweng7010.url, kreweng7011.url, kreweng7012.url, kreweng7013.url, kreweng7014.url, kreweng7015.url, kreweng7017.url],
     facts: [
       { label: "Komoditas", value: "Kopi Liberika Klepu" },
       { label: "Pemilik", value: "Binti Ziananingrum menurut katalog" },
