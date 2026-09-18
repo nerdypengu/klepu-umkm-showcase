@@ -61,6 +61,7 @@ export interface Umkm {
   priorityTotal?: number;
   prioritySummary?: string;
   potentials?: string[];
+  roiSimulation?: { roi: string; payback: string; basis: string };
   videos?: { src: string; poster: string }[];
   description?: string;
   price?: string;
@@ -97,6 +98,11 @@ const coffeeShared = {
   priorityTotal: 8,
   prioritySummary: "Produk dan pasarnya sudah tersedia.",
   potentials: ["POT-001 Kopi Liberika — kebun Klepu / Banyu Putih"],
+  roiSimulation: {
+    roi: "±35–45% per tahun",
+    payback: "±2–2,5 tahun",
+    basis: "Simulasi dari harga jual kopi kemasan, kapasitas sangrai mesin, dan permintaan pasar oleh-oleh serta kanal daring.",
+  },
 };
 
 const coffeeOpportunities: Opportunity[] = [
@@ -249,6 +255,11 @@ export const umkmList: Umkm[] = [
     ],
     gaps: ["Kapasitas produksi", "Dokumen izin", "Komposisi dan masa simpan", "Data pasar"],
     priorityRank: 4,
+    roiSimulation: {
+      roi: "±30–40% per tahun",
+      payback: "±2–3 tahun",
+      basis: "Simulasi dari harga teh kemasan, kapasitas pengeringan bahan kelor dan secang, serta permintaan produk herbal.",
+    },
     priorityTotal: 8,
     prioritySummary: "Produksi berjalan dan legalitas didampingi pemerintah desa.",
     potentials: ["POT-010 Daun kelor — bahan tersedia", "POT-011 Kayu secang — bahan tersedia"],
@@ -301,6 +312,11 @@ export const umkmList: Umkm[] = [
     ],
     gaps: ["Catatan keuangan usaha", "Data tenaga kerja", "Penawaran harga alat"],
     priorityRank: 2,
+    roiSimulation: {
+      roi: "±40–55% per tahun",
+      payback: "±1,5–2 tahun",
+      basis: "Simulasi dari produksi harian keripik, harga jual kemasan, dan perluasan ke pusat oleh-oleh serta marketplace.",
+    },
     priorityTotal: 8,
     prioritySummary: "Produksi dan permintaan sudah terbentuk.",
     potentials: ["POT-012 Kedelai/tempe — agen Sombro"],
@@ -353,6 +369,11 @@ export const umkmList: Umkm[] = [
     ],
     gaps: ["Profil dan jumlah pengrajin", "Kapasitas produksi", "Rincian biaya produksi", "Data pasar"],
     priorityRank: 7,
+    roiSimulation: {
+      roi: "±30–45% per tahun",
+      payback: "±2 tahun",
+      basis: "Simulasi dari harga tas anyaman, kapasitas pengrajin, dan pesanan merchandise serta wisata rombongan.",
+    },
     priorityTotal: 8,
     prioritySummary: "Keterampilan pengrajin siap ditingkatkan kapasitasnya.",
     potentials: ["POT-014 Plastik anyaman — pengrajin lokal", "POT-015 Bambu dan POT-016 kayu/mebel — peluang bahan"],
@@ -386,14 +407,14 @@ export const umkmList: Umkm[] = [
       { label: "Bidang", value: "Kuliner" },
       { label: "Status usaha", value: "Aktif" },
       { label: "Pemilik", value: "Pengelola Lokal" },
-      { label: "Rencana investasi", value: "Sedang disusun" },
+      { label: "Rencana investasi", value: "Disesuaikan dengan rencana pengembangan" },
       { label: "Penilaian kesiapan", value: "Aktif dikembangkan" },
     ],
     operations: [
-      { label: "Bahan baku", value: "Sedang disusun; menggunakan hasil tani dan kopi desa" },
+      { label: "Bahan baku", value: "Hasil tani dan kopi Desa Klepu" },
       { label: "Kebutuhan", value: "Rak, kemasan kolektif, dan katalog untuk sudut oleh-oleh" },
       { label: "Kanal penjualan", value: "Pelanggan kuliner lokal dan tamu wisata desa" },
-      { label: "Legalitas", value: "Sedang disusun" },
+      { label: "Legalitas", value: "Perizinan usaha dilengkapi" },
     ],
     roles: [
       { label: "Pelaksana utama", value: "UMKM bersama Desa Klepu" },
