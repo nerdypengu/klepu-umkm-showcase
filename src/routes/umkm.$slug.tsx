@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, ArrowRight, Check, CircleAlert, MapPin, MessageCircle, Target } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, CircleAlert, ListChecks, MapPin, MessageCircle, Sprout, Target, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { getUmkm, umkmList } from "@/lib/umkm-data";
