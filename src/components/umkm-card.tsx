@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import type { Umkm } from "@/lib/umkm-data";
-import { StatusBadge } from "@/components/status-badge";
 
 export function UmkmCard({ item }: { item: Umkm }) {
   return (
@@ -12,7 +11,7 @@ export function UmkmCard({ item }: { item: Umkm }) {
       <div className="flex flex-1 flex-col p-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <span className="rounded-full bg-secondary px-2.5 py-1 text-[11px] font-bold text-secondary-foreground">{item.category}</span>
-          <StatusBadge status={item.investmentStatus} />
+          <span className="text-[11px] font-semibold text-muted-foreground">{item.activeStatus}</span>
         </div>
         <h3 className="mt-3 font-display text-xl font-bold leading-tight">{item.name}</h3>
         <p className="mt-1 flex-1 text-sm leading-relaxed text-muted-foreground">{item.summary}</p>
