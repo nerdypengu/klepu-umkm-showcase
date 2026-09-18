@@ -3,7 +3,7 @@ import { ArrowLeft, ArrowRight, Check, CircleAlert, MapPin, Target } from "lucid
 import { Button } from "@/components/ui/button";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { StatusBadge } from "@/components/status-badge";
-import { getUmkm, umkmList } from "@/lib/umkm-data";
+import { getUmkm, umkmList, widerOpportunities } from "@/lib/umkm-data";
 
 export const Route = createFileRoute("/umkm/$slug")({
   loader: ({ params }) => {
@@ -85,6 +85,23 @@ function UmkmDetailPage() {
             <InfoList title="Risiko utama" icon={<CircleAlert />} items={item.risks} tone="caution" />
             <InfoList title="Cara mengurangi risiko" icon={<Target />} items={item.mitigations} tone="green" />
             <InfoList title="Syarat sebelum final" icon={<Check />} items={item.prerequisites} tone="neutral" />
+          </div>
+        </section>
+
+        <section className="border-y border-border bg-card">
+          <div className="mx-auto max-w-6xl px-5 py-14 sm:px-6">
+            <p className="font-display text-xs font-bold uppercase text-primary">Peluang desa</p>
+            <h2 className="mt-2 font-display text-3xl font-extrabold sm:text-4xl">Peluang pengembangan terkait</h2>
+            <p className="mt-3 max-w-2xl leading-relaxed text-muted-foreground">{item.opportunityContext}</p>
+            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {widerOpportunities.map((opportunity) => (
+                <div key={opportunity.name} className="rounded-2xl border border-border bg-background p-5 shadow-clay">
+                  <p className="font-display text-lg font-bold">{opportunity.name}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">{opportunity.status}</p>
+                  <p className="mt-5 font-display text-lg font-extrabold text-primary">{opportunity.investment}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
