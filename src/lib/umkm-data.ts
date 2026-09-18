@@ -328,10 +328,24 @@ export const umkmList: Umkm[] = [
     mapsUrl: LAPAK_MAPS,
     facts: [
       { label: "Harga", value: "Rp45.000" },
-      { label: "Pembuat", value: "Pengrajin lokal" },
-      { label: "Pemilik", value: "Pengrajin lokal" },
+      { label: "Pembuat", value: "Pengrajin lokal Desa Klepu" },
       { label: "Kapasitas", value: "Belum tersedia" },
+      { label: "Penilaian kesiapan", value: "Perlu penguatan" },
     ],
+    operations: [
+      { label: "Bahan baku", value: "Plastik anyaman dari pengrajin lokal (terkonfirmasi)" },
+      { label: "Kebutuhan", value: "Bahan, peralatan, pengembangan desain, dan kemasan" },
+      { label: "Kanal penjualan", value: "Wisatawan, paket suvenir, dan penjualan lewat desa" },
+      { label: "Potensi bahan lain", value: "Bambu dan kayu/mebel masih perlu pendataan" },
+    ],
+    roles: [
+      { label: "Pelaksana utama", value: "Pengrajin anyaman Desa Klepu" },
+      { label: "Pokdarwis Jayandaru", value: "Memasukkan suvenir ke paket wisata" },
+      { label: "BUMDes / Pemerintah Desa", value: "Membantu penjualan dan pemasaran" },
+    ],
+    gaps: ["Profil dan jumlah pengrajin", "Kapasitas produksi", "Rincian biaya produksi", "Data pasar"],
+    priority: "Prioritas 7 dari 8 peluang desa — kapasitas produksi belum diketahui.",
+    potentials: ["POT-014 Plastik anyaman — pengrajin lokal (terkonfirmasi)", "POT-015 Bambu dan POT-016 kayu/mebel — perlu verifikasi"],
   },
   {
     id: "UMKM-007",
