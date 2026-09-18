@@ -54,6 +54,11 @@ export interface Umkm {
   mitigations: string[];
   prerequisites: string[];
   facts: BusinessFact[];
+  operations?: BusinessFact[];
+  roles?: BusinessFact[];
+  gaps?: string[];
+  priority?: string;
+  potentials?: string[];
   videos?: { src: string; poster: string }[];
   description?: string;
   price?: string;
@@ -73,6 +78,21 @@ const coffeeShared = {
   risks: ["Kontinuitas pasokan kopi", "Konsistensi mutu sangrai", "Perubahan harga dan penjualan"],
   mitigations: ["Pemasok tetap", "SOP produksi", "Komitmen pembelian", "Diversifikasi produk"],
   prerequisites: ["HPP terverifikasi", "Catatan penjualan", "Dokumen izin", "Penawaran harga alat"],
+  operations: [
+    { label: "Bahan baku", value: "Kopi Liberika dari petani Desa Klepu (nama pemasok dan volume masih didata)" },
+    { label: "Kebutuhan alat", value: "Mesin sangrai (roaster), grinder, sealer, dan kemasan" },
+    { label: "Model investasi", value: "Alat bersama antar-UMKM kopi atau pembiayaan bertahap" },
+    { label: "Kanal penjualan", value: "Toko, kios Goa Maria, pusat oleh-oleh, dan pemesanan langsung" },
+    { label: "Legalitas", value: "Status izin masih dalam pemeriksaan dokumen" },
+  ],
+  roles: [
+    { label: "Pelaksana utama", value: "UMKM kopi bersama petani kopi Klepu" },
+    { label: "Pokdarwis Jayandaru", value: "Promosi lewat jalur wisata desa" },
+    { label: "BUMDes / Pemerintah Desa", value: "Pengadaan mesin bersama dan fasilitasi" },
+  ],
+  gaps: ["HPP per kemasan", "Catatan penjualan historis", "Bukti dokumen izin", "Data volume pasokan kopi"],
+  priority: "Prioritas 1 dari 8 peluang desa — produk dan pasarnya sudah tersedia.",
+  potentials: ["POT-001 Kopi Liberika — kebun Klepu / Banyu Putih (terkonfirmasi sebagian)"],
 };
 
 const coffeeOpportunities: Opportunity[] = [
@@ -102,11 +122,20 @@ export const umkmList: Umkm[] = [
     mapsUrl: LAPAK_MAPS,
     facts: [
       { label: "Harga produk", value: "Rp17.000 per 150 gram" },
-      { label: "Penjualan", value: "15 kemasan per minggu" },
+      { label: "Penjualan", value: "15 kemasan per minggu (sekitar 65 kemasan per bulan)" },
+      { label: "Pesanan terbesar", value: "30 kemasan dalam satu pemesanan" },
       { label: "Tenaga kerja", value: "5 orang" },
       { label: "Tempat produksi", value: "Rumah tangga" },
-      { label: "Proses produksi", value: "Sekitar 3 hari" },
+      { label: "Proses produksi", value: "Sekitar 3 hari per siklus" },
       { label: "Digital", value: "WhatsApp dan Shopee; tautan belum dicatat" },
+    ],
+    operations: [
+      { label: "Bahan baku", value: "Kopi Liberika dari petani Desa Klepu; nama pemasok dan volume masih didata" },
+      { label: "Mesin yang sudah dimiliki", value: "Mesin pengupas dan pembersih kulit kopi" },
+      { label: "Kebutuhan alat", value: "Mesin sangrai dan pelatihan penggunaannya" },
+      { label: "Distribusi", value: "Diantar sendiri dengan kendaraan milik usaha" },
+      { label: "Kanal penjualan", value: "Wisatawan, toko, kios Goa Maria, dan pusat oleh-oleh" },
+      { label: "Legalitas", value: "NIB dinyatakan tersedia; dokumen masih perlu ditunjukkan" },
     ],
   },
   {
@@ -198,9 +227,25 @@ export const umkmList: Umkm[] = [
     facts: [
       { label: "Harga", value: "Rp11.000" },
       { label: "Bahan", value: "Daun kelor dan kayu secang" },
+      { label: "Bentuk produk", value: "Teh celup siap seduh" },
       { label: "Pasokan bahan", value: "Pemasok belum terdata" },
       { label: "Kapasitas dan penjualan", value: "Belum tersedia" },
+      { label: "Penilaian kesiapan", value: "Perlu pendampingan" },
     ],
+    operations: [
+      { label: "Bahan baku", value: "Daun kelor (POT-010) dan kayu secang (POT-011); bahan terkonfirmasi, pemasok belum terdata" },
+      { label: "Kebutuhan alat", value: "Pengering, grinder, dan alat pengemas" },
+      { label: "Legalitas", value: "Izin edar, komposisi, dan masa simpan masih dalam pendampingan" },
+      { label: "Kanal penjualan", value: "Pasar oleh-oleh dan minuman herbal" },
+    ],
+    roles: [
+      { label: "Pelaksana utama", value: "UMKM herbal Desa Klepu" },
+      { label: "Pokdarwis Jayandaru", value: "Promosi produk ke pengunjung desa" },
+      { label: "BUMDes / Pemerintah Desa", value: "Pendampingan pengurusan izin" },
+    ],
+    gaps: ["Kapasitas produksi", "Dokumen izin", "Komposisi dan masa simpan", "Data pasar"],
+    priority: "Prioritas 4 dari 8 peluang desa — produksi dan legalitas masih perlu dilengkapi.",
+    potentials: ["POT-010 Daun kelor — bahan terkonfirmasi", "POT-011 Kayu secang — bahan terkonfirmasi"],
   },
   {
     id: "UMKM-005",
@@ -234,7 +279,23 @@ export const umkmList: Umkm[] = [
       { label: "Harga", value: "Rp4.000 toko; Rp4.500–5.000 eceran" },
       { label: "Tenaga kerja", value: "Pemilik dan satu orang" },
       { label: "Produksi bulanan", value: "Sekitar 960–1.000 kemasan" },
+      { label: "Penilaian kesiapan", value: "Siap bersyarat" },
     ],
+    operations: [
+      { label: "Bahan baku", value: "Kedelai/tempe dari agen Sombro (terkonfirmasi)" },
+      { label: "Pemakaian bahan", value: "4–4,5 kg per sekali produksi" },
+      { label: "Kebutuhan alat", value: "Pemotong, peniris minyak, sealer, dan kemasan" },
+      { label: "Kanal penjualan", value: "Toko titipan dan pembeli eceran" },
+      { label: "Legalitas", value: "NIB, PIRT, dan halal masih perlu diperiksa dokumennya" },
+    ],
+    roles: [
+      { label: "Pelaksana utama", value: "UMKM Ibu Ros" },
+      { label: "Pokdarwis Jayandaru", value: "Pemasaran sebagai oleh-oleh desa" },
+      { label: "BUMDes / Pemerintah Desa", value: "Distribusi, bantuan alat, dan pengurusan izin" },
+    ],
+    gaps: ["Catatan keuangan usaha", "Data tenaga kerja", "Penawaran harga alat"],
+    priority: "Prioritas 2 dari 8 peluang desa — produksi dan permintaan sudah terbentuk.",
+    potentials: ["POT-012 Kedelai/tempe — agen Sombro (terkonfirmasi)"],
   },
   {
     id: "UMKM-006",
@@ -267,10 +328,24 @@ export const umkmList: Umkm[] = [
     mapsUrl: LAPAK_MAPS,
     facts: [
       { label: "Harga", value: "Rp45.000" },
-      { label: "Pembuat", value: "Pengrajin lokal" },
-      { label: "Pemilik", value: "Pengrajin lokal" },
+      { label: "Pembuat", value: "Pengrajin lokal Desa Klepu" },
       { label: "Kapasitas", value: "Belum tersedia" },
+      { label: "Penilaian kesiapan", value: "Perlu penguatan" },
     ],
+    operations: [
+      { label: "Bahan baku", value: "Plastik anyaman dari pengrajin lokal (terkonfirmasi)" },
+      { label: "Kebutuhan", value: "Bahan, peralatan, pengembangan desain, dan kemasan" },
+      { label: "Kanal penjualan", value: "Wisatawan, paket suvenir, dan penjualan lewat desa" },
+      { label: "Potensi bahan lain", value: "Bambu dan kayu/mebel masih perlu pendataan" },
+    ],
+    roles: [
+      { label: "Pelaksana utama", value: "Pengrajin anyaman Desa Klepu" },
+      { label: "Pokdarwis Jayandaru", value: "Memasukkan suvenir ke paket wisata" },
+      { label: "BUMDes / Pemerintah Desa", value: "Membantu penjualan dan pemasaran" },
+    ],
+    gaps: ["Profil dan jumlah pengrajin", "Kapasitas produksi", "Rincian biaya produksi", "Data pasar"],
+    priority: "Prioritas 7 dari 8 peluang desa — kapasitas produksi belum diketahui.",
+    potentials: ["POT-014 Plastik anyaman — pengrajin lokal (terkonfirmasi)", "POT-015 Bambu dan POT-016 kayu/mebel — perlu verifikasi"],
   },
   {
     id: "UMKM-007",
@@ -302,7 +377,22 @@ export const umkmList: Umkm[] = [
       { label: "Status usaha", value: "Aktif" },
       { label: "Pemilik", value: "Pengelola Lokal" },
       { label: "Rencana investasi", value: "Belum disusun" },
+      { label: "Penilaian kesiapan", value: "Data awal" },
     ],
+    operations: [
+      { label: "Bahan baku", value: "Belum didata; berpotensi memakai hasil tani dan kopi desa" },
+      { label: "Kebutuhan", value: "Rak, kemasan kolektif, dan katalog untuk sudut oleh-oleh" },
+      { label: "Kanal penjualan", value: "Pelanggan kuliner lokal dan tamu wisata desa" },
+      { label: "Legalitas", value: "Belum didata" },
+    ],
+    roles: [
+      { label: "Pelaksana utama", value: "UMKM bersama Desa Klepu" },
+      { label: "Pokdarwis Jayandaru", value: "Kurasi produk dan paket wisata" },
+      { label: "BUMDes / Pemerintah Desa", value: "Pengelolaan gerai dan tata kelola" },
+    ],
+    gaps: ["Identitas pemilik dan pengelola", "Daftar produk dan harga", "Kapasitas layanan", "Kebutuhan dana"],
+    priority: "Terkait prioritas 5 dari 8 peluang desa — paket wisata dan oleh-oleh yang masih perlu pengelola dan SOP.",
+    potentials: ["POT-017 Desa wisata — Pokdarwis Jayandaru (terkonfirmasi sebagian)"],
   },
 ];
 

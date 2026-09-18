@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, ArrowRight, Check, CircleAlert, MapPin, MessageCircle, Target } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, CircleAlert, ListChecks, MapPin, MessageCircle, Sprout, Target, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { getUmkm, umkmList } from "@/lib/umkm-data";
@@ -64,6 +64,26 @@ function UmkmDetailPage() {
                   <div key={fact.label} className="grid gap-2 rounded-2xl border border-border p-4 sm:grid-cols-[1fr_1.4fr] sm:items-center"><p className="text-sm font-bold">{fact.label}</p><p className="text-sm text-muted-foreground">{fact.value}</p></div>
                 ))}
               </div>
+              {item.operations && item.operations.length > 0 && (
+                <div className="mt-10">
+                  <h3 className="font-display text-2xl font-extrabold">Bahan baku, alat, dan penjualan</h3>
+                  <div className="mt-5 space-y-3">
+                    {item.operations.map((fact) => (
+                      <div key={fact.label} className="grid gap-2 rounded-2xl border border-border p-4 sm:grid-cols-[1fr_1.4fr] sm:items-center"><p className="text-sm font-bold">{fact.label}</p><p className="text-sm text-muted-foreground">{fact.value}</p></div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {item.potentials && item.potentials.length > 0 && (
+                <div className="mt-10">
+                  <h3 className="font-display text-2xl font-extrabold">Potensi desa yang menopang</h3>
+                  <ul className="mt-5 space-y-2">
+                    {item.potentials.map((potential) => (
+                      <li key={potential} className="flex gap-2 rounded-2xl bg-background p-4 text-sm leading-relaxed text-muted-foreground"><Sprout className="mt-0.5 size-4 shrink-0 text-primary" />{potential}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
 
             <aside>
@@ -94,6 +114,43 @@ function UmkmDetailPage() {
             <InfoList title="Syarat sebelum final" icon={<Check />} items={item.prerequisites} tone="neutral" />
           </div>
         </section>
+
+        {(item.roles || item.gaps || item.priority) && (
+          <section className="mx-auto max-w-6xl px-5 pb-16 sm:px-6">
+            <div className="grid gap-6 lg:grid-cols-2">
+              {item.roles && item.roles.length > 0 && (
+                <div className="rounded-[1.75rem] border border-border bg-card p-6">
+                  <div className="grid size-10 place-items-center rounded-xl bg-secondary text-primary"><Users /></div>
+                  <h2 className="mt-4 font-display text-xl font-bold">Siapa yang menjalankan</h2>
+                  <div className="mt-4 space-y-3">
+                    {item.roles.map((role) => (
+                      <div key={role.label} className="rounded-2xl bg-background p-4"><p className="text-sm font-bold">{role.label}</p><p className="mt-1 text-sm leading-relaxed text-muted-foreground">{role.value}</p></div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              <div className="space-y-6">
+                {item.gaps && item.gaps.length > 0 && (
+                  <div className="rounded-[1.75rem] border border-border bg-card p-6">
+                    <div className="grid size-10 place-items-center rounded-xl bg-muted text-foreground"><ListChecks /></div>
+                    <h2 className="mt-4 font-display text-xl font-bold">Data yang masih dilengkapi</h2>
+                    <ul className="mt-4 space-y-3">
+                      {item.gaps.map((gap) => (
+                        <li key={gap} className="flex gap-2 text-sm leading-relaxed text-muted-foreground"><span className="mt-2 size-1.5 shrink-0 rounded-full bg-primary" />{gap}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {item.priority && (
+                  <div className="rounded-[1.75rem] bg-primary p-6 text-primary-foreground">
+                    <h2 className="font-display text-xl font-bold">Urutan pengembangan desa</h2>
+                    <p className="mt-3 leading-relaxed text-primary-foreground/85">{item.priority}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </section>
+        )}
 
         {item.videos && item.videos.length > 0 && (
           <section className="border-y border-border bg-card">
