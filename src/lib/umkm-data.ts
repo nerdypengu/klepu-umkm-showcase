@@ -377,7 +377,22 @@ export const umkmList: Umkm[] = [
       { label: "Status usaha", value: "Aktif" },
       { label: "Pemilik", value: "Pengelola Lokal" },
       { label: "Rencana investasi", value: "Belum disusun" },
+      { label: "Penilaian kesiapan", value: "Data awal" },
     ],
+    operations: [
+      { label: "Bahan baku", value: "Belum didata; berpotensi memakai hasil tani dan kopi desa" },
+      { label: "Kebutuhan", value: "Rak, kemasan kolektif, dan katalog untuk sudut oleh-oleh" },
+      { label: "Kanal penjualan", value: "Pelanggan kuliner lokal dan tamu wisata desa" },
+      { label: "Legalitas", value: "Belum didata" },
+    ],
+    roles: [
+      { label: "Pelaksana utama", value: "UMKM bersama Desa Klepu" },
+      { label: "Pokdarwis Jayandaru", value: "Kurasi produk dan paket wisata" },
+      { label: "BUMDes / Pemerintah Desa", value: "Pengelolaan gerai dan tata kelola" },
+    ],
+    gaps: ["Identitas pemilik dan pengelola", "Daftar produk dan harga", "Kapasitas layanan", "Kebutuhan dana"],
+    priority: "Terkait prioritas 5 dari 8 peluang desa — paket wisata dan oleh-oleh yang masih perlu pengelola dan SOP.",
+    potentials: ["POT-017 Desa wisata — Pokdarwis Jayandaru (terkonfirmasi sebagian)"],
   },
 ];
 
