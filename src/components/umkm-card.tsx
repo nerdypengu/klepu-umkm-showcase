@@ -31,8 +31,8 @@ export function UmkmCard({ item }: { item: Umkm }) {
         <h3 className="mt-3 font-display text-xl font-bold leading-tight transition-colors group-hover:text-primary">
           {item.name}
         </h3>
-        <p className="mt-1 flex-1 text-sm leading-relaxed text-muted-foreground">
-          {item.summary}
+        <p className="mt-1 flex-1 text-sm leading-relaxed text-muted-foreground line-clamp-3">
+          {item.description ?? item.summary}
         </p>
         <div className="mt-4 flex items-end justify-between gap-3 border-t border-border pt-3 text-xs">
           <span className="text-muted-foreground">
