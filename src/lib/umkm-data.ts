@@ -227,9 +227,25 @@ export const umkmList: Umkm[] = [
     facts: [
       { label: "Harga", value: "Rp11.000" },
       { label: "Bahan", value: "Daun kelor dan kayu secang" },
+      { label: "Bentuk produk", value: "Teh celup siap seduh" },
       { label: "Pasokan bahan", value: "Pemasok belum terdata" },
       { label: "Kapasitas dan penjualan", value: "Belum tersedia" },
+      { label: "Penilaian kesiapan", value: "Perlu pendampingan" },
     ],
+    operations: [
+      { label: "Bahan baku", value: "Daun kelor (POT-010) dan kayu secang (POT-011); bahan terkonfirmasi, pemasok belum terdata" },
+      { label: "Kebutuhan alat", value: "Pengering, grinder, dan alat pengemas" },
+      { label: "Legalitas", value: "Izin edar, komposisi, dan masa simpan masih dalam pendampingan" },
+      { label: "Kanal penjualan", value: "Pasar oleh-oleh dan minuman herbal" },
+    ],
+    roles: [
+      { label: "Pelaksana utama", value: "UMKM herbal Desa Klepu" },
+      { label: "Pokdarwis Jayandaru", value: "Promosi produk ke pengunjung desa" },
+      { label: "BUMDes / Pemerintah Desa", value: "Pendampingan pengurusan izin" },
+    ],
+    gaps: ["Kapasitas produksi", "Dokumen izin", "Komposisi dan masa simpan", "Data pasar"],
+    priority: "Prioritas 4 dari 8 peluang desa — produksi dan legalitas masih perlu dilengkapi.",
+    potentials: ["POT-010 Daun kelor — bahan terkonfirmasi", "POT-011 Kayu secang — bahan terkonfirmasi"],
   },
   {
     id: "UMKM-005",
