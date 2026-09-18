@@ -11,6 +11,14 @@ import kreweng7013 from "@/assets/kreweng-7013.mp4.asset.json";
 import kreweng7014 from "@/assets/kreweng-7014.mp4.asset.json";
 import kreweng7015 from "@/assets/kreweng-7015.mp4.asset.json";
 import kreweng7017 from "@/assets/kreweng-7017.mp4.asset.json";
+import kreweng7009Poster from "@/assets/kreweng-7009-poster.jpg.asset.json";
+import kreweng7010Poster from "@/assets/kreweng-7010-poster.jpg.asset.json";
+import kreweng7011Poster from "@/assets/kreweng-7011-poster.jpg.asset.json";
+import kreweng7012Poster from "@/assets/kreweng-7012-poster.jpg.asset.json";
+import kreweng7013Poster from "@/assets/kreweng-7013-poster.jpg.asset.json";
+import kreweng7014Poster from "@/assets/kreweng-7014-poster.jpg.asset.json";
+import kreweng7015Poster from "@/assets/kreweng-7015-poster.jpg.asset.json";
+import kreweng7017Poster from "@/assets/kreweng-7017-poster.jpg.asset.json";
 import heroImage from "@/assets/klepu-hero.jpg";
 
 export type Category = "Kopi" | "Herbal" | "Makanan" | "Kerajinan" | "Kuliner";
@@ -47,7 +55,7 @@ export interface Umkm {
   mitigations: string[];
   prerequisites: string[];
   facts: BusinessFact[];
-  videos?: string[];
+  videos?: { src: string; poster: string }[];
 }
 
 const coffeeShared = {
@@ -104,7 +112,16 @@ export const umkmList: Umkm[] = [
     activeStatus: "Aktif",
     ...coffeeShared,
     opportunities: coffeeOpportunities,
-    videos: [kreweng7009.url, kreweng7010.url, kreweng7011.url, kreweng7012.url, kreweng7013.url, kreweng7014.url, kreweng7015.url, kreweng7017.url],
+    videos: [
+      { src: kreweng7009.url, poster: kreweng7009Poster.url },
+      { src: kreweng7010.url, poster: kreweng7010Poster.url },
+      { src: kreweng7011.url, poster: kreweng7011Poster.url },
+      { src: kreweng7012.url, poster: kreweng7012Poster.url },
+      { src: kreweng7013.url, poster: kreweng7013Poster.url },
+      { src: kreweng7014.url, poster: kreweng7014Poster.url },
+      { src: kreweng7015.url, poster: kreweng7015Poster.url },
+      { src: kreweng7017.url, poster: kreweng7017Poster.url },
+    ],
     facts: [
       { label: "Komoditas", value: "Kopi Liberika Klepu" },
       { label: "Pemilik", value: "Binti Ziananingrum menurut katalog" },

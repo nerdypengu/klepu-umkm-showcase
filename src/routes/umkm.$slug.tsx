@@ -94,7 +94,7 @@ function UmkmDetailPage() {
               <p className="mt-3 max-w-2xl leading-relaxed text-muted-foreground">Dokumentasi produk dan proses usaha {item.name}.</p>
               <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 {item.videos.map((video, index) => (
-                  <video key={video} src={video} controls preload="metadata" playsInline className="aspect-[3/4] w-full rounded-2xl border border-border bg-muted object-cover shadow-clay" aria-label={`Video ${item.name} ${index + 1}`} />
+                  <video key={video.src} src={video.src} poster={video.poster} controls preload="none" playsInline className="aspect-[3/4] w-full rounded-2xl border border-border bg-muted object-cover shadow-clay" aria-label={`Video ${item.name} ${index + 1}`} />
                 ))}
               </div>
             </div>
