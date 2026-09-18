@@ -2,6 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Check, CircleAlert, ListChecks, MapPin, MessageCircle, Sprout, Target, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
+import { InvestmentChart } from "@/components/investment-chart";
 import { getUmkm, umkmList } from "@/lib/umkm-data";
 
 export const Route = createFileRoute("/umkm/$slug")({
@@ -191,6 +192,19 @@ function UmkmDetailPage() {
                   <p className="mt-5 font-display text-lg font-extrabold text-primary">{opportunity.investment}</p>
                 </div>
               ))}
+            </div>
+            <div className="mt-10">
+              <h3 className="font-display text-2xl font-extrabold">Perbandingan kebutuhan modal</h3>
+              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">Kisaran modal tiap peluang dibanding modal usaha inti.</p>
+              <div className="mt-5">
+                <InvestmentChart
+                  rows={[
+                    { label: `${item.name} (usaha inti)`, value: item.investment, highlight: true },
+                    ...item.opportunities.map((opportunity) => ({ label: opportunity.name, value: opportunity.investment })),
+                  ]}
+                  caption="Nilai dalam juta rupiah dan bersifat indikatif."
+                />
+              </div>
             </div>
           </div>
         </section>
