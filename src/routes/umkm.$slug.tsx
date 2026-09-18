@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, ArrowRight, Check, CircleAlert, MapPin, Target } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, CircleAlert, MapPin, MessageCircle, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { getUmkm, umkmList } from "@/lib/umkm-data";
@@ -52,8 +52,10 @@ function UmkmDetailPage() {
             <div>
               <p className="font-display text-xs font-bold uppercase text-primary">Profil usaha</p>
               <h2 className="mt-2 font-display text-3xl font-extrabold">Profil usaha</h2>
+              {item.description && <p className="mt-5 max-w-2xl leading-relaxed text-muted-foreground">{item.description}</p>}
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
                 <div className="rounded-2xl bg-background p-4"><p className="text-xs font-bold text-muted-foreground">Produk utama</p><p className="mt-1 font-semibold">{item.product}</p></div>
+                {item.price && <div className="rounded-2xl bg-background p-4"><p className="text-xs font-bold text-muted-foreground">Harga</p><p className="mt-1 font-semibold">{item.price}</p></div>}
                 <div className="rounded-2xl bg-background p-4"><p className="text-xs font-bold text-muted-foreground">Pemilik / pengelola</p><p className="mt-1 font-semibold">{item.owner}</p></div>
                 <div className="rounded-2xl bg-background p-4 sm:col-span-2"><p className="flex items-center gap-2 text-xs font-bold text-muted-foreground"><Target className="size-3.5" /> Pasar yang dituju</p><p className="mt-1 leading-relaxed">{item.market}</p></div>
               </div>
@@ -72,6 +74,12 @@ function UmkmDetailPage() {
                   <p className="mt-1 font-display text-4xl font-extrabold text-primary">{item.investment}</p>
                   <div className="mt-6 border-t border-border pt-5"><p className="text-sm font-bold">Penggunaan dana</p><ul className="mt-3 space-y-2">{item.investmentUse.map((use) => <li key={use} className="flex gap-2 text-sm text-muted-foreground"><Check className="mt-0.5 size-4 shrink-0 text-primary" />{use}</li>)}</ul></div>
                   <Button asChild variant="clay" size="lg" className="mt-7 w-full"><a href="https://klepu-sooko.desa.id/" target="_blank" rel="noreferrer">Nyatakan minat <ArrowRight /></a></Button>
+                  {(item.whatsapp || item.mapsUrl) && (
+                    <div className="mt-3 grid grid-cols-2 gap-2">
+                      {item.whatsapp && <Button asChild variant="outline" size="sm"><a href={item.whatsapp} target="_blank" rel="noreferrer"><MessageCircle /> WhatsApp</a></Button>}
+                      {item.mapsUrl && <Button asChild variant="outline" size="sm"><a href={item.mapsUrl} target="_blank" rel="noreferrer"><MapPin /> Lokasi</a></Button>}
+                    </div>
+                  )}
                   <p className="mt-3 text-center text-xs leading-relaxed text-muted-foreground">Kontak pemilik hanya dibagikan dengan persetujuan. Tidak ada jaminan hasil investasi.</p>
                 </div>
               </div>
