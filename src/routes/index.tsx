@@ -11,12 +11,14 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Peluang Investasi UMKM Desa Klepu" },
-      { name: "description", content: "Jelajahi tujuh UMKM aktif dan peluang investasi berbasis data di Desa Klepu, Sooko, Ponorogo." },
-      { property: "og:title", content: "Peluang Investasi UMKM Desa Klepu" },
-      { property: "og:description", content: "Jelajahi tujuh UMKM aktif dan peluang investasi berbasis data di Desa Klepu, Sooko, Ponorogo." },
+      { title: "Desa Klepu — Potensi & Peluang Investasi UMKM Unggulan Ponorogo" },
+      { name: "description", content: "Jelajahi peluang investasi lokal paling prospektif di Desa Klepu, Ponorogo. Temukan Kopi Liberika khas, Herbal Kelor-Secang, Keripik Tempe, dan Kerajinan Anyaman." },
+      { property: "og:title", content: "Katalog & Peluang Investasi UMKM Desa Klepu, Ponorogo" },
+      { property: "og:description", content: "Dukung pertumbuhan ekonomi desa melalui produk-produk unggulan Klepu: Kopi Liberika, Minuman Herbal, Kerajinan Anyaman, & Kuliner Lokal." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Desa Klepu — Potensi & Peluang Investasi UMKM Unggulan Ponorogo" },
+      { name: "twitter:description", content: "Jelajahi peluang investasi UMKM aktif & potensi ekonomi kreatif Desa Klepu, Sooko, Ponorogo." },
     ],
   }),
   component: HomePage,
@@ -35,10 +37,7 @@ function HomePage() {
         <section id="beranda" className="mx-auto max-w-6xl px-5 pb-12 pt-10 sm:px-6 lg:pt-14">
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <div>
-              <span className="inline-flex items-center gap-2 rounded-full bg-secondary px-3 py-1.5 text-xs font-bold text-secondary-foreground shadow-[0_4px_0_var(--shadow-soft)]">
-                <span className="size-2 rounded-full bg-accent" /> Peta Investasi UMKM 2026
-              </span>
-              <h1 className="mt-5 max-w-xl font-display text-5xl font-extrabold leading-[1.02] sm:text-6xl">
+              <h1 className="max-w-xl font-display text-5xl font-extrabold leading-[1.02] sm:text-6xl">
                 Investasi yang tumbuh <span className="text-primary">dari desa.</span>
               </h1>
               <p className="mt-5 max-w-lg text-lg leading-relaxed text-muted-foreground">

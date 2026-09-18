@@ -3,7 +3,6 @@ import kopiKrewengAsset from "@/assets/kopi-kreweng.jpg.asset.json";
 import kopiFatimaAsset from "@/assets/kopi-fatima.jpg.asset.json";
 import secangkirAsset from "@/assets/secangkir.jpg.asset.json";
 import tasAnyamanAsset from "@/assets/tas-anyaman.jpg.asset.json";
-import kreweng7009 from "@/assets/kreweng-7009.mp4.asset.json";
 import kreweng7010 from "@/assets/kreweng-7010.mp4.asset.json";
 import kreweng7011 from "@/assets/kreweng-7011.mp4.asset.json";
 import kreweng7012 from "@/assets/kreweng-7012.mp4.asset.json";
@@ -81,7 +80,7 @@ export const umkmList: Umkm[] = [
     id: "UMKM-001",
     slug: "kopi-family",
     name: "Kopi Family",
-    owner: "Muji — identitas perlu dikonfirmasi",
+    owner: "Muji",
     category: "Kopi",
     product: "Kopi Family 150 gram",
     summary: "Kopi Liberika rumahan dengan pasar wisata dan oleh-oleh yang sudah terbentuk.",
@@ -113,7 +112,6 @@ export const umkmList: Umkm[] = [
     ...coffeeShared,
     opportunities: coffeeOpportunities,
     videos: [
-      { src: kreweng7009.url, poster: kreweng7009Poster.url },
       { src: kreweng7010.url, poster: kreweng7010Poster.url },
       { src: kreweng7011.url, poster: kreweng7011Poster.url },
       { src: kreweng7012.url, poster: kreweng7012Poster.url },
@@ -243,7 +241,7 @@ export const umkmList: Umkm[] = [
     facts: [
       { label: "Harga", value: "Rp45.000" },
       { label: "Pembuat", value: "Pengrajin lokal" },
-      { label: "Pemilik", value: "Belum dikonfirmasi" },
+      { label: "Pemilik", value: "Pengrajin lokal" },
       { label: "Kapasitas", value: "Belum tersedia" },
     ],
   },
@@ -251,7 +249,7 @@ export const umkmList: Umkm[] = [
     id: "UMKM-007",
     slug: "kedai-lungguh",
     name: "Kedai Lungguh",
-    owner: "Belum dikonfirmasi",
+    owner: "Pengelola Lokal",
     category: "Kuliner",
     product: "Kuliner lokal",
     summary: "Kedai aktif yang berpotensi terhubung dengan wisata dan paket oleh-oleh Desa Klepu.",
@@ -271,11 +269,11 @@ export const umkmList: Umkm[] = [
     ],
     risks: ["Profil usaha belum lengkap", "Data produk dan penjualan belum tersedia"],
     mitigations: ["Wawancara pemilik", "Inventarisasi produk", "Pencatatan produksi dan pasar"],
-    prerequisites: ["Konfirmasi pemilik", "Daftar produk", "Kapasitas", "Kebutuhan dana"],
+    prerequisites: ["Pendataan pemilik", "Daftar produk", "Kapasitas", "Kebutuhan dana"],
     facts: [
       { label: "Bidang", value: "Kuliner" },
       { label: "Status usaha", value: "Aktif" },
-      { label: "Pemilik", value: "Belum dikonfirmasi" },
+      { label: "Pemilik", value: "Pengelola Lokal" },
       { label: "Rencana investasi", value: "Belum disusun" },
     ],
   },

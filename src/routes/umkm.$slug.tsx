@@ -12,12 +12,14 @@ export const Route = createFileRoute("/umkm/$slug")({
   },
   head: ({ loaderData }) => ({
     meta: [
-      { title: loaderData ? `${loaderData.name} — Investasi UMKM Desa Klepu` : "UMKM Tidak Ditemukan — Desa Klepu" },
-      { name: "description", content: loaderData?.summary ?? "Profil UMKM Desa Klepu tidak ditemukan." },
-      { property: "og:title", content: loaderData ? `${loaderData.name} — Investasi Desa Klepu` : "UMKM Tidak Ditemukan" },
-      { property: "og:description", content: loaderData?.summary ?? "Profil UMKM Desa Klepu tidak ditemukan." },
+      { title: loaderData ? `${loaderData.name} (${loaderData.category}) — Potensi & Investasi Desa Klepu` : "UMKM Tidak Ditemukan — Desa Klepu" },
+      { name: "description", content: loaderData ? `${loaderData.name}: ${loaderData.summary} Kebutuhan modal indikatif ${loaderData.investment}. Pelajari fakta usaha & analisa pasarnya.` : "Profil UMKM Desa Klepu tidak ditemukan." },
+      { property: "og:title", content: loaderData ? `${loaderData.name} — Peluang Investasi Produk ${loaderData.category}` : "UMKM Tidak Ditemukan" },
+      { property: "og:description", content: loaderData ? `${loaderData.summary} Indikasi modal: ${loaderData.investment}. Temukan detail lengkapnya di Showcase UMKM Desa Klepu.` : "Profil UMKM Desa Klepu tidak ditemukan." },
       { property: "og:type", content: "article" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: loaderData ? `${loaderData.name} — Potensi UMKM ${loaderData.category} Klepu` : "UMKM Tidak Ditemukan" },
+      { name: "twitter:description", content: loaderData?.summary ?? "Profil UMKM Desa Klepu tidak ditemukan." },
     ],
   }),
   notFoundComponent: UmkmNotFound,
@@ -50,7 +52,6 @@ function UmkmDetailPage() {
             <div>
               <p className="font-display text-xs font-bold uppercase text-primary">Profil usaha</p>
               <h2 className="mt-2 font-display text-3xl font-extrabold">Profil usaha</h2>
-              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">Informasi berasal dari draf data Desa Klepu dan masih dapat diperbarui setelah pendataan lanjutan bersama pemilik usaha.</p>
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
                 <div className="rounded-2xl bg-background p-4"><p className="text-xs font-bold text-muted-foreground">Produk utama</p><p className="mt-1 font-semibold">{item.product}</p></div>
                 <div className="rounded-2xl bg-background p-4"><p className="text-xs font-bold text-muted-foreground">Pemilik / pengelola</p><p className="mt-1 font-semibold">{item.owner}</p></div>
