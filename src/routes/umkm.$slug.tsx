@@ -2,8 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Check, CircleAlert, MapPin, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
-import { StatusBadge } from "@/components/status-badge";
-import { getUmkm, umkmList, widerOpportunities } from "@/lib/umkm-data";
+import { getUmkm, umkmList } from "@/lib/umkm-data";
 
 export const Route = createFileRoute("/umkm/$slug")({
   loader: ({ params }) => {
@@ -37,7 +36,7 @@ function UmkmDetailPage() {
           <Link to="/" hash="umkm" className="inline-flex items-center gap-2 text-sm font-bold text-primary hover:text-accent"><ArrowLeft className="size-4" /> Kembali ke daftar</Link>
           <div className="mt-7 grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
             <div>
-              <div className="flex flex-wrap items-center gap-2"><span className="rounded-full bg-secondary px-3 py-1 text-xs font-bold text-secondary-foreground">{item.category}</span><StatusBadge status={item.investmentStatus} /></div>
+              <div className="flex flex-wrap items-center gap-2"><span className="rounded-full bg-secondary px-3 py-1 text-xs font-bold text-secondary-foreground">{item.category}</span><span className="rounded-full border border-border px-3 py-1 text-xs font-semibold text-muted-foreground">{item.product}</span></div>
               <h1 className="mt-4 font-display text-5xl font-extrabold leading-[1.02] sm:text-6xl">{item.name}</h1>
               <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">{item.summary}</p>
               <div className="mt-7 flex flex-wrap gap-3 text-sm"><span className="rounded-xl bg-card px-4 py-3 shadow-clay"><strong className="block text-xs text-muted-foreground">Status usaha</strong>{item.activeStatus}</span><span className="rounded-xl bg-card px-4 py-3 shadow-clay"><strong className="block text-xs text-muted-foreground">Kesiapan</strong>{item.readiness}</span></div>
@@ -51,7 +50,7 @@ function UmkmDetailPage() {
             <div>
               <p className="font-display text-xs font-bold uppercase text-primary">Profil usaha</p>
               <h2 className="mt-2 font-display text-3xl font-extrabold">Fakta yang sudah tersedia</h2>
-              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">Informasi berasal dari draf data Desa Klepu. Label pada setiap angka menunjukkan apakah data sudah tercatat, masih perlu diperiksa, berupa simulasi, atau rekomendasi.</p>
+              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">Informasi berasal dari draf data Desa Klepu dan masih dapat diperbarui setelah pendataan lanjutan bersama pemilik usaha.</p>
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
                 <div className="rounded-2xl bg-background p-4"><p className="text-xs font-bold text-muted-foreground">Produk utama</p><p className="mt-1 font-semibold">{item.product}</p></div>
                 <div className="rounded-2xl bg-background p-4"><p className="text-xs font-bold text-muted-foreground">Pemilik / pengelola</p><p className="mt-1 font-semibold">{item.owner}</p></div>
@@ -59,7 +58,7 @@ function UmkmDetailPage() {
               </div>
               <div className="mt-8 space-y-3">
                 {item.facts.map((fact) => (
-                  <div key={fact.label} className="grid gap-2 rounded-2xl border border-border p-4 sm:grid-cols-[1fr_1.4fr_auto] sm:items-center"><p className="text-sm font-bold">{fact.label}</p><p className="text-sm text-muted-foreground">{fact.value}</p><StatusBadge status={fact.status} /></div>
+                  <div key={fact.label} className="grid gap-2 rounded-2xl border border-border p-4 sm:grid-cols-[1fr_1.4fr] sm:items-center"><p className="text-sm font-bold">{fact.label}</p><p className="text-sm text-muted-foreground">{fact.value}</p></div>
                 ))}
               </div>
             </div>
@@ -70,7 +69,6 @@ function UmkmDetailPage() {
                 <div className="p-6">
                   <p className="text-xs font-bold uppercase text-muted-foreground">Modal indikatif</p>
                   <p className="mt-1 font-display text-4xl font-extrabold text-primary">{item.investment}</p>
-                  <StatusBadge status={item.investmentStatus} className="mt-3" />
                   <div className="mt-6 border-t border-border pt-5"><p className="text-sm font-bold">Penggunaan dana</p><ul className="mt-3 space-y-2">{item.investmentUse.map((use) => <li key={use} className="flex gap-2 text-sm text-muted-foreground"><Check className="mt-0.5 size-4 shrink-0 text-primary" />{use}</li>)}</ul></div>
                   <Button asChild variant="clay" size="lg" className="mt-7 w-full"><a href="https://klepu-sooko.desa.id/" target="_blank" rel="noreferrer">Nyatakan minat <ArrowRight /></a></Button>
                   <p className="mt-3 text-center text-xs leading-relaxed text-muted-foreground">Kontak pemilik hanya dibagikan dengan persetujuan. Tidak ada jaminan hasil investasi.</p>
@@ -90,14 +88,14 @@ function UmkmDetailPage() {
 
         <section className="border-y border-border bg-card">
           <div className="mx-auto max-w-6xl px-5 py-14 sm:px-6">
-            <p className="font-display text-xs font-bold uppercase text-primary">Peluang desa</p>
-            <h2 className="mt-2 font-display text-3xl font-extrabold sm:text-4xl">Peluang pengembangan terkait</h2>
+            <p className="font-display text-xs font-bold uppercase text-primary">Peluang produk</p>
+            <h2 className="mt-2 font-display text-3xl font-extrabold sm:text-4xl">Peluang pengembangan {item.product}</h2>
             <p className="mt-3 max-w-2xl leading-relaxed text-muted-foreground">{item.opportunityContext}</p>
             <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {widerOpportunities.map((opportunity) => (
-                <div key={opportunity.name} className="rounded-2xl border border-border bg-background p-5 shadow-clay">
-                  <p className="font-display text-lg font-bold">{opportunity.name}</p>
-                  <p className="mt-1 text-xs text-muted-foreground">{opportunity.status}</p>
+              {item.opportunities.map((opportunity) => (
+                <div key={opportunity.name} className="flex flex-col rounded-2xl border border-border bg-background p-5 shadow-clay">
+                  <p className="font-display text-lg font-bold leading-tight">{opportunity.name}</p>
+                  <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{opportunity.detail}</p>
                   <p className="mt-5 font-display text-lg font-extrabold text-primary">{opportunity.investment}</p>
                 </div>
               ))}

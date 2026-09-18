@@ -5,13 +5,17 @@ import secangkirAsset from "@/assets/secangkir.jpg.asset.json";
 import tasAnyamanAsset from "@/assets/tas-anyaman.jpg.asset.json";
 import heroImage from "@/assets/klepu-hero.jpg";
 
-export type EvidenceStatus = "Faktual" | "Turunan" | "Perlu verifikasi" | "Simulasi" | "Rekomendasi";
 export type Category = "Kopi" | "Herbal" | "Makanan" | "Kerajinan" | "Kuliner";
 
 export interface BusinessFact {
   label: string;
   value: string;
-  status: EvidenceStatus;
+}
+
+export interface Opportunity {
+  name: string;
+  investment: string;
+  detail: string;
 }
 
 export interface Umkm {
@@ -27,35 +31,33 @@ export interface Umkm {
   activeStatus: string;
   readiness: string;
   investment: string;
-  investmentStatus: EvidenceStatus;
   investmentUse: string[];
   market: string;
   opportunityContext: string;
+  opportunities: Opportunity[];
   risks: string[];
   mitigations: string[];
   prerequisites: string[];
   facts: BusinessFact[];
 }
 
-export const evidenceDescriptions: Record<EvidenceStatus, string> = {
-  Faktual: "Berasal dari narasumber atau dokumen dan dapat ditampilkan setelah verifikasi.",
-  Turunan: "Dihitung dari data faktual dan perlu dibaca bersama periode serta rumusnya.",
-  "Perlu verifikasi": "Sudah disebutkan, tetapi bukti atau rinciannya belum lengkap.",
-  Simulasi: "Asumsi sementara untuk menguji skenario, bukan hasil aktual.",
-  Rekomendasi: "Hasil analisis awal dan belum dianggap sebagai produk atau capaian aktif.",
-};
-
 const coffeeShared = {
   readiness: "Siap bersyarat",
   investment: "Rp20–28 juta",
-  investmentStatus: "Rekomendasi" as const,
   investmentUse: ["Mesin sangrai", "Grinder", "Sealer dan kemasan", "Modal kerja awal"],
   market: "Wisatawan, toko, kios Goa Maria, pusat oleh-oleh, reseller, dan kanal daring.",
-  opportunityContext: "Kopi Liberika Klepu dapat memperkuat klaster kopi desa, bergabung dalam paket oleh-oleh, dan dikembangkan bersama wisata kopi.",
+  opportunityContext: "Pengembangan produk turunan dari Kopi Liberika Klepu yang bisa dijalankan dari usaha ini.",
   risks: ["Kontinuitas pasokan kopi", "Konsistensi mutu sangrai", "Perubahan harga dan penjualan"],
   mitigations: ["Pemasok tetap", "SOP produksi", "Komitmen pembelian", "Diversifikasi produk"],
   prerequisites: ["HPP terverifikasi", "Catatan penjualan", "Dokumen izin", "Penawaran harga alat"],
 };
+
+const coffeeOpportunities: Opportunity[] = [
+  { name: "Drip bag kopi", investment: "Rp6–12 juta", detail: "Kemasan sekali seduh untuk wisatawan dan pengiriman antarkota." },
+  { name: "Kopi kemasan premium", investment: "Rp8–15 juta", detail: "Ukuran 100 g dan 250 g dengan label, tanggal sangrai, dan profil rasa." },
+  { name: "Paket oleh-oleh kopi", investment: "Rp5–12 juta", detail: "Kopi digabung camilan desa sebagai satu paket suvenir." },
+  { name: "Wisata kopi", investment: "Rp15–30 juta", detail: "Kunjungan kebun, sangrai, dan seduh bersama untuk rombongan wisata." },
+];
 
 export const umkmList: Umkm[] = [
   {
@@ -70,13 +72,14 @@ export const umkmList: Umkm[] = [
     imageAlt: "Kemasan produk Kopi Family dari Desa Klepu",
     activeStatus: "Aktif; verifikasi identitas",
     ...coffeeShared,
+    opportunities: coffeeOpportunities,
     facts: [
-      { label: "Harga produk", value: "Rp17.000 per 150 gram", status: "Faktual" },
-      { label: "Penjualan", value: "15 kemasan per minggu", status: "Faktual" },
-      { label: "Tenaga kerja", value: "5 orang", status: "Faktual" },
-      { label: "Tempat produksi", value: "Rumah tangga", status: "Faktual" },
-      { label: "Proses produksi", value: "Sekitar 3 hari", status: "Faktual" },
-      { label: "Digital", value: "WhatsApp dan Shopee; tautan belum dicatat", status: "Perlu verifikasi" },
+      { label: "Harga produk", value: "Rp17.000 per 150 gram" },
+      { label: "Penjualan", value: "15 kemasan per minggu" },
+      { label: "Tenaga kerja", value: "5 orang" },
+      { label: "Tempat produksi", value: "Rumah tangga" },
+      { label: "Proses produksi", value: "Sekitar 3 hari" },
+      { label: "Digital", value: "WhatsApp dan Shopee; tautan belum dicatat" },
     ],
   },
   {
@@ -91,11 +94,12 @@ export const umkmList: Umkm[] = [
     imageAlt: "Kemasan produk Kopi Kreweng dari Desa Klepu",
     activeStatus: "Aktif; perlu verifikasi",
     ...coffeeShared,
+    opportunities: coffeeOpportunities,
     facts: [
-      { label: "Komoditas", value: "Kopi Liberika Klepu", status: "Faktual" },
-      { label: "Pemilik", value: "Binti Ziananingrum menurut katalog", status: "Perlu verifikasi" },
-      { label: "Kapasitas", value: "Belum tersedia", status: "Perlu verifikasi" },
-      { label: "Model investasi", value: "Alat bersama atau pembiayaan bertahap", status: "Rekomendasi" },
+      { label: "Komoditas", value: "Kopi Liberika Klepu" },
+      { label: "Pemilik", value: "Binti Ziananingrum menurut katalog" },
+      { label: "Kapasitas", value: "Belum tersedia" },
+      { label: "Model investasi", value: "Alat bersama atau pembiayaan bertahap" },
     ],
   },
   {
@@ -110,11 +114,12 @@ export const umkmList: Umkm[] = [
     imageAlt: "Kemasan produk Kopi Fatima dari Desa Klepu",
     activeStatus: "Aktif",
     ...coffeeShared,
+    opportunities: coffeeOpportunities,
     facts: [
-      { label: "Komoditas", value: "Kopi Liberika Klepu", status: "Faktual" },
-      { label: "Status usaha", value: "Aktif", status: "Faktual" },
-      { label: "Kapasitas", value: "Belum tersedia", status: "Perlu verifikasi" },
-      { label: "Pengembangan", value: "Kopi bubuk, drip bag, dan paket wisata kopi", status: "Rekomendasi" },
+      { label: "Komoditas", value: "Kopi Liberika Klepu" },
+      { label: "Status usaha", value: "Aktif" },
+      { label: "Kapasitas", value: "Belum tersedia" },
+      { label: "Pengembangan", value: "Kopi bubuk, drip bag, dan paket wisata kopi" },
     ],
   },
   {
@@ -130,18 +135,23 @@ export const umkmList: Umkm[] = [
     activeStatus: "Aktif",
     readiness: "Perlu penguatan",
     investment: "Rp10–20 juta",
-    investmentStatus: "Rekomendasi",
     investmentUse: ["Pengering", "Grinder", "Alat pengemas", "Pengurusan izin"],
     market: "Pasar oleh-oleh dan minuman herbal; data penjualan belum tersedia.",
-    opportunityContext: "Teh kelor-secang dapat masuk ke dalam paket oleh-oleh herbal dan dikembangkan sebagai minuman khas wisata desa.",
+    opportunityContext: "Pengembangan lanjutan dari produk teh kelor–secang yang sudah dibuat.",
+    opportunities: [
+      { name: "Teh celup kelor–secang", investment: "Rp8–15 juta", detail: "Kemasan celup agar lebih praktis dan tahan simpan." },
+      { name: "Minuman siap seduh botolan", investment: "Rp12–20 juta", detail: "Varian seduh dingin untuk kedai dan titik wisata." },
+      { name: "Paket oleh-oleh herbal", investment: "Rp5–12 juta", detail: "Kotak isi teh kelor, secang, dan camilan desa." },
+      { name: "Kebun kelor mitra", investment: "Rp6–12 juta", detail: "Penanaman kelor bersama warga agar pasokan bahan stabil." },
+    ],
     risks: ["Sumber bahan belum tercatat", "HPP belum tersedia", "Legalitas dan masa simpan belum lengkap"],
     mitigations: ["Pendataan pemasok", "Uji masa simpan", "Pendampingan izin", "Pencatatan biaya produksi"],
     prerequisites: ["Berat dan isi produk", "Kapasitas produksi", "HPP", "Bukti izin"],
     facts: [
-      { label: "Harga", value: "Rp11.000", status: "Faktual" },
-      { label: "Bahan", value: "Daun kelor dan kayu secang", status: "Faktual" },
-      { label: "Pasokan bahan", value: "Pemasok belum terdata", status: "Perlu verifikasi" },
-      { label: "Kapasitas dan penjualan", value: "Belum tersedia", status: "Perlu verifikasi" },
+      { label: "Harga", value: "Rp11.000" },
+      { label: "Bahan", value: "Daun kelor dan kayu secang" },
+      { label: "Pasokan bahan", value: "Pemasok belum terdata" },
+      { label: "Kapasitas dan penjualan", value: "Belum tersedia" },
     ],
   },
   {
@@ -157,20 +167,25 @@ export const umkmList: Umkm[] = [
     activeStatus: "Aktif",
     readiness: "Relatif prospektif",
     investment: "Rp8–15 juta",
-    investmentStatus: "Rekomendasi",
     investmentUse: ["Pemotong", "Peniris minyak", "Sealer", "Kemasan"],
     market: "Permintaan telah terbentuk melalui toko dan pembeli eceran.",
-    opportunityContext: "Keripik tempe cocok dikemas dalam paket oleh-oleh dan dapat menjadi produk andalan pangan desa.",
+    opportunityContext: "Pengembangan produk turunan dari keripik tempe yang sudah diproduksi rutin.",
+    opportunities: [
+      { name: "Varian rasa keripik", investment: "Rp4–8 juta", detail: "Rasa pedas, balado, dan original dalam kemasan berbeda." },
+      { name: "Kemasan toples oleh-oleh", investment: "Rp5–10 juta", detail: "Ukuran besar untuk pusat oleh-oleh dan pemesanan acara." },
+      { name: "Penjualan daring", investment: "Rp3–6 juta", detail: "Foto produk, kemasan aman kirim, dan toko di marketplace." },
+      { name: "Kapasitas produksi ganda", investment: "Rp10–18 juta", detail: "Pemotong dan peniris tambahan untuk melipatgandakan hasil." },
+    ],
     risks: ["Kapasitas manual", "Mutu hasil penggorengan", "Dokumen legalitas belum diperiksa"],
     mitigations: ["Peralatan terukur", "SOP produksi", "Verifikasi dokumen", "Kemasan lebih konsisten"],
     prerequisites: ["HPP", "Catatan penjualan", "Bukti NIB/PIRT/halal", "Penawaran alat"],
     facts: [
-      { label: "Mulai usaha", value: "Sekitar 2014", status: "Faktual" },
-      { label: "Hasil per proses", value: "120–125 kemasan", status: "Faktual" },
-      { label: "Frekuensi", value: "Sekitar dua kali seminggu", status: "Faktual" },
-      { label: "Harga", value: "Rp4.000 toko; Rp4.500–5.000 eceran", status: "Faktual" },
-      { label: "Tenaga kerja", value: "Pemilik dan satu orang", status: "Faktual" },
-      { label: "Produksi bulanan", value: "Sekitar 960–1.000 kemasan", status: "Turunan" },
+      { label: "Mulai usaha", value: "Sekitar 2014" },
+      { label: "Hasil per proses", value: "120–125 kemasan" },
+      { label: "Frekuensi", value: "Sekitar dua kali seminggu" },
+      { label: "Harga", value: "Rp4.000 toko; Rp4.500–5.000 eceran" },
+      { label: "Tenaga kerja", value: "Pemilik dan satu orang" },
+      { label: "Produksi bulanan", value: "Sekitar 960–1.000 kemasan" },
     ],
   },
   {
@@ -186,18 +201,23 @@ export const umkmList: Umkm[] = [
     activeStatus: "Aktif",
     readiness: "Perlu penguatan",
     investment: "Rp5–10 juta",
-    investmentStatus: "Rekomendasi",
     investmentUse: ["Bahan", "Peralatan", "Pengembangan desain", "Kemasan"],
     market: "Wisatawan, paket suvenir, dan pemasaran oleh Pokdarwis.",
-    opportunityContext: "Tas anyaman dapat dijadikan suvenir unggulan dalam paket oleh-oleh dan merchandise wisata desa.",
+    opportunityContext: "Pengembangan lini produk anyaman dari keterampilan pengrajin yang sudah ada.",
+    opportunities: [
+      { name: "Suvenir anyaman kecil", investment: "Rp3–6 juta", detail: "Dompet, tempat tisu, dan gantungan untuk harga terjangkau." },
+      { name: "Katalog desain baru", investment: "Rp4–8 juta", detail: "Variasi ukuran, warna, dan motif khas Klepu." },
+      { name: "Pesanan merchandise", investment: "Rp5–10 juta", detail: "Tas berlogo untuk instansi, acara desa, dan wisata rombongan." },
+      { name: "Kelas anyaman wisata", investment: "Rp6–12 juta", detail: "Pengalaman membuat anyaman bagi pengunjung desa." },
+    ],
     risks: ["Kapasitas belum diketahui", "Rincian bahan dan biaya belum tersedia", "Pasar belum terdokumentasi"],
     mitigations: ["Pendataan waktu kerja", "Katalog ukuran dan warna", "Kurasi suvenir", "Uji pasar wisata"],
     prerequisites: ["Profil pengrajin", "Kapasitas", "Biaya produksi", "Data pasar"],
     facts: [
-      { label: "Harga", value: "Rp45.000", status: "Faktual" },
-      { label: "Pembuat", value: "Pengrajin lokal", status: "Faktual" },
-      { label: "Pemilik", value: "Belum dikonfirmasi", status: "Perlu verifikasi" },
-      { label: "Kapasitas", value: "Belum tersedia", status: "Perlu verifikasi" },
+      { label: "Harga", value: "Rp45.000" },
+      { label: "Pembuat", value: "Pengrajin lokal" },
+      { label: "Pemilik", value: "Belum dikonfirmasi" },
+      { label: "Kapasitas", value: "Belum tersedia" },
     ],
   },
   {
@@ -213,27 +233,25 @@ export const umkmList: Umkm[] = [
     activeStatus: "Aktif",
     readiness: "Data awal",
     investment: "Belum ditetapkan",
-    investmentStatus: "Perlu verifikasi",
     investmentUse: ["Kebutuhan alat belum didata", "Kapasitas belum didata", "Rencana investasi belum divalidasi"],
     market: "Pelanggan kuliner lokal dan potensi pasar wisata.",
-    opportunityContext: "Kedai Lungguh bisa menjadi titik pemasaran beras kemasan, susu, dan paket oleh-oleh hasil desa.",
+    opportunityContext: "Pengembangan layanan kedai sebagai etalase produk kuliner Desa Klepu.",
+    opportunities: [
+      { name: "Menu kopi Liberika Klepu", investment: "Rp8–15 juta", detail: "Mesin seduh dan menu kopi desa sebagai menu utama kedai." },
+      { name: "Sudut oleh-oleh desa", investment: "Rp5–12 juta", detail: "Rak penjualan keripik, teh kelor, dan anyaman warga." },
+      { name: "Paket makan rombongan", investment: "Rp6–12 juta", detail: "Menu dan peralatan saji untuk tamu wisata berkelompok." },
+      { name: "Area kumpul dan acara", investment: "Rp10–20 juta", detail: "Penataan tempat duduk untuk acara kecil dan pertemuan warga." },
+    ],
     risks: ["Profil usaha belum lengkap", "Data produk dan penjualan belum tersedia"],
     mitigations: ["Wawancara pemilik", "Inventarisasi produk", "Pencatatan produksi dan pasar"],
     prerequisites: ["Konfirmasi pemilik", "Daftar produk", "Kapasitas", "Kebutuhan dana"],
     facts: [
-      { label: "Bidang", value: "Kuliner", status: "Faktual" },
-      { label: "Status usaha", value: "Aktif", status: "Faktual" },
-      { label: "Pemilik", value: "Belum dikonfirmasi", status: "Perlu verifikasi" },
-      { label: "Rencana investasi", value: "Belum disusun", status: "Perlu verifikasi" },
+      { label: "Bidang", value: "Kuliner" },
+      { label: "Status usaha", value: "Aktif" },
+      { label: "Pemilik", value: "Belum dikonfirmasi" },
+      { label: "Rencana investasi", value: "Belum disusun" },
     ],
   },
-];
-
-export const widerOpportunities = [
-  { name: "Beras kemasan", investment: "Rp10–20 juta", status: "Menunggu volume" },
-  { name: "Susu pasteurisasi & yoghurt", investment: "Rp35–85 juta", status: "Belum dinilai" },
-  { name: "Paket oleh-oleh", investment: "Rp5–12 juta", status: "Prospektif" },
-  { name: "Kompos", investment: "Rp15–35 juta", status: "Menunggu data limbah" },
 ];
 
 export function getUmkm(slug: string) {
