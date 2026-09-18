@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { UmkmCard } from "@/components/umkm-card";
 import heroImage from "@/assets/klepu-hero.jpg";
-import { umkmList, type Category } from "@/lib/umkm-data";
+import { type Category, type Umkm } from "@/lib/umkm-data";
+import { fetchUmkmList } from "@/lib/umkm.functions";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
@@ -21,14 +22,17 @@ export const Route = createFileRoute("/")({
       { name: "twitter:description", content: "Jelajahi peluang investasi UMKM aktif & potensi ekonomi kreatif Desa Klepu, Sooko, Ponorogo." },
     ],
   }),
+  loader: () => fetchUmkmList(),
+  errorComponent: () => <div className="p-10 text-center">Data UMKM belum dapat dimuat. Coba muat ulang halaman.</div>,
   component: HomePage,
 });
 
 const categories = ["Semua", "Kopi", "Herbal", "Makanan", "Kerajinan", "Kuliner"] as const;
 
 function HomePage() {
+  const umkmList = Route.useLoaderData();
   const [category, setCategory] = useState<(typeof categories)[number]>("Semua");
-  const filtered = useMemo(() => category === "Semua" ? umkmList : umkmList.filter((item) => item.category === category as Category), [category]);
+  const filtered = useMemo(() => category === "Semua" ? umkmList : umkmList.filter((item) => item.category === category as Category), [category, umkmList]);
 
   return (
     <div className="min-h-screen bg-background text-foreground antialiased">
@@ -60,7 +64,7 @@ function HomePage() {
                 ))}
               </div>
             </div>
-            <HeroCarousel />
+            <HeroCarousel umkmList={umkmList} />
           </div>
         </section>
 
@@ -88,22 +92,21 @@ function HomePage() {
   );
 }
 
-const slides = [
-  { image: heroImage, alt: "Ragam produk unggulan Desa Klepu", title: "Produk Desa Klepu", note: "Tujuh UMKM aktif" },
-  ...umkmList
-    .filter((item, index, all) => all.findIndex((other) => other.image === item.image) === index && item.image !== heroImage)
-    .map((item) => ({ image: item.image, alt: item.imageAlt, title: item.name, note: `Indikatif ${item.investment}` })),
-];
-
-function HeroCarousel() {
+function HeroCarousel({ umkmList }: { umkmList: Umkm[] }) {
   const [active, setActive] = useState(0);
+  const slides = useMemo(() => [
+    { image: heroImage, alt: "Ragam produk unggulan Desa Klepu", title: "Produk Desa Klepu", note: "Tujuh UMKM aktif" },
+    ...umkmList
+      .filter((item, index, all) => all.findIndex((other) => other.image === item.image) === index && item.image !== heroImage)
+      .map((item) => ({ image: item.image, alt: item.imageAlt, title: item.name, note: `Indikatif ${item.investment}` })),
+  ], [umkmList]);
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (media.matches) return;
     const timer = window.setInterval(() => setActive((current) => (current + 1) % slides.length), 4500);
     return () => window.clearInterval(timer);
-  }, []);
+  }, [slides.length]);
 
   const go = (step: number) => setActive((current) => (current + step + slides.length) % slides.length);
   const current = slides[active]!;
