@@ -192,6 +192,19 @@ function UmkmDetailPage() {
                 </div>
               ))}
             </div>
+            <div className="mt-10">
+              <h3 className="font-display text-2xl font-extrabold">Perbandingan kebutuhan modal</h3>
+              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">Kisaran modal tiap peluang dibanding modal usaha inti.</p>
+              <div className="mt-5">
+                <InvestmentChart
+                  rows={[
+                    { label: `${item.name} (usaha inti)`, value: item.investment, highlight: true },
+                    ...item.opportunities.map((opportunity) => ({ label: opportunity.name, value: opportunity.investment })),
+                  ]}
+                  caption="Nilai dalam juta rupiah dan bersifat indikatif."
+                />
+              </div>
+            </div>
           </div>
         </section>
 
