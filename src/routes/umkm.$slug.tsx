@@ -49,12 +49,12 @@ function UmkmDetailPage() {
           <div className="mx-auto grid max-w-6xl gap-10 px-5 py-14 sm:px-6 lg:grid-cols-[1.15fr_0.85fr]">
             <div>
               <p className="font-display text-xs font-bold uppercase text-primary">Profil usaha</p>
-              <h2 className="mt-2 font-display text-3xl font-extrabold">Fakta yang sudah tersedia</h2>
+              <h2 className="mt-2 font-display text-3xl font-extrabold">Profil usaha</h2>
               <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">Informasi berasal dari draf data Desa Klepu dan masih dapat diperbarui setelah pendataan lanjutan bersama pemilik usaha.</p>
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
                 <div className="rounded-2xl bg-background p-4"><p className="text-xs font-bold text-muted-foreground">Produk utama</p><p className="mt-1 font-semibold">{item.product}</p></div>
                 <div className="rounded-2xl bg-background p-4"><p className="text-xs font-bold text-muted-foreground">Pemilik / pengelola</p><p className="mt-1 font-semibold">{item.owner}</p></div>
-                <div className="rounded-2xl bg-background p-4 sm:col-span-2"><p className="flex items-center gap-2 text-xs font-bold text-muted-foreground"><MapPin className="size-3.5" /> Pasar yang dituju</p><p className="mt-1 leading-relaxed">{item.market}</p></div>
+                <div className="rounded-2xl bg-background p-4 sm:col-span-2"><p className="flex items-center gap-2 text-xs font-bold text-muted-foreground"><Target className="size-3.5" /> Pasar yang dituju</p><p className="mt-1 leading-relaxed">{item.market}</p></div>
               </div>
               <div className="mt-8 space-y-3">
                 {item.facts.map((fact) => (
@@ -94,7 +94,7 @@ function UmkmDetailPage() {
               <p className="mt-3 max-w-2xl leading-relaxed text-muted-foreground">Dokumentasi produk dan proses usaha {item.name}.</p>
               <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 {item.videos.map((video, index) => (
-                  <video key={video.src} src={video.src} poster={video.poster} controls preload="none" playsInline className="aspect-[3/4] w-full rounded-2xl border border-border bg-muted object-cover shadow-clay" aria-label={`Video ${item.name} ${index + 1}`} />
+                  <video key={video.src} src={video.src} poster={video.poster} autoPlay loop muted playsInline className="aspect-[3/4] w-full rounded-2xl border border-border bg-muted object-cover shadow-clay" aria-label={`Video ${item.name} ${index + 1}`} />
                 ))}
               </div>
             </div>
