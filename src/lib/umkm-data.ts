@@ -10,7 +10,6 @@ import kreweng7013 from "@/assets/kreweng-7013.mp4.asset.json";
 import kreweng7014 from "@/assets/kreweng-7014.mp4.asset.json";
 import kreweng7015 from "@/assets/kreweng-7015.mp4.asset.json";
 import kreweng7017 from "@/assets/kreweng-7017.mp4.asset.json";
-import kreweng7009Poster from "@/assets/kreweng-7009-poster.jpg.asset.json";
 import kreweng7010Poster from "@/assets/kreweng-7010-poster.jpg.asset.json";
 import kreweng7011Poster from "@/assets/kreweng-7011-poster.jpg.asset.json";
 import kreweng7012Poster from "@/assets/kreweng-7012-poster.jpg.asset.json";
@@ -19,6 +18,15 @@ import kreweng7014Poster from "@/assets/kreweng-7014-poster.jpg.asset.json";
 import kreweng7015Poster from "@/assets/kreweng-7015-poster.jpg.asset.json";
 import kreweng7017Poster from "@/assets/kreweng-7017-poster.jpg.asset.json";
 import heroImage from "@/assets/klepu-hero.jpg";
+
+const LOVABLE_PREVIEW_HOST = process.env["LOVABLE_PREVIEW_HOST"] || "";
+
+export function resolveAssetUrl(rawUrl: string): string {
+  if (typeof rawUrl === "string" && rawUrl.startsWith("/__l5e/assets-v1/")) {
+    return LOVABLE_PREVIEW_HOST ? `https://${LOVABLE_PREVIEW_HOST}${rawUrl}` : rawUrl;
+  }
+  return rawUrl;
+}
 
 export type Category = "Kopi" | "Herbal" | "Makanan" | "Kerajinan" | "Kuliner";
 
@@ -143,7 +151,7 @@ export const umkmList: Umkm[] = [
     category: "Kopi",
     product: "Kopi Family 150 gram",
     summary: "Kopi Liberika rumahan dengan pasar wisata dan oleh-oleh yang sudah terbentuk.",
-    image: kopiFamilyAsset.url,
+    image: resolveAssetUrl(kopiFamilyAsset.url),
     imageAlt: "Kemasan produk Kopi Family dari Desa Klepu",
     activeStatus: "Aktif",
     ...coffeeShared,
@@ -178,19 +186,19 @@ export const umkmList: Umkm[] = [
     category: "Kopi",
     product: "Kopi bubuk Liberika",
     summary: "Produk kopi lokal aktif yang berpeluang tumbuh melalui alat bersama dan kemasan yang lebih kuat.",
-    image: kopiKrewengAsset.url,
+    image: resolveAssetUrl(kopiKrewengAsset.url),
     imageAlt: "Kemasan produk Kopi Kreweng dari Desa Klepu",
     activeStatus: "Aktif",
     ...coffeeShared,
     opportunities: coffeeOpportunities,
     videos: [
-      { src: kreweng7010.url, poster: kreweng7010Poster.url },
-      { src: kreweng7011.url, poster: kreweng7011Poster.url },
-      { src: kreweng7012.url, poster: kreweng7012Poster.url },
-      { src: kreweng7013.url, poster: kreweng7013Poster.url },
-      { src: kreweng7014.url, poster: kreweng7014Poster.url },
-      { src: kreweng7015.url, poster: kreweng7015Poster.url },
-      { src: kreweng7017.url, poster: kreweng7017Poster.url },
+      { src: resolveAssetUrl(kreweng7010.url), poster: resolveAssetUrl(kreweng7010Poster.url) },
+      { src: resolveAssetUrl(kreweng7011.url), poster: resolveAssetUrl(kreweng7011Poster.url) },
+      { src: resolveAssetUrl(kreweng7012.url), poster: resolveAssetUrl(kreweng7012Poster.url) },
+      { src: resolveAssetUrl(kreweng7013.url), poster: resolveAssetUrl(kreweng7013Poster.url) },
+      { src: resolveAssetUrl(kreweng7014.url), poster: resolveAssetUrl(kreweng7014Poster.url) },
+      { src: resolveAssetUrl(kreweng7015.url), poster: resolveAssetUrl(kreweng7015Poster.url) },
+      { src: resolveAssetUrl(kreweng7017.url), poster: resolveAssetUrl(kreweng7017Poster.url) },
     ],
     description: "Kopi Kreweng merupakan kopi yang diolah secara manual dari petik, pengupasan, pengeringan, bahkan digoreng menggunakan kreweng (wajan tanah liat). Berat: 200 gram.",
     price: "Rp17.000 (200 g)",
@@ -211,7 +219,7 @@ export const umkmList: Umkm[] = [
     category: "Kopi",
     product: "Kopi bubuk Liberika",
     summary: "Produk kopi aktif dalam klaster Liberika Klepu dengan peluang penguatan produksi dan pemasaran.",
-    image: kopiFatimaAsset.url,
+    image: resolveAssetUrl(kopiFatimaAsset.url),
     imageAlt: "Kemasan produk Kopi Fatima dari Desa Klepu",
     activeStatus: "Aktif",
     ...coffeeShared,
@@ -235,7 +243,7 @@ export const umkmList: Umkm[] = [
     category: "Herbal",
     product: "Teh kelor–secang",
     summary: "Minuman herbal berbahan daun kelor dan kayu secang dengan peluang peningkatan proses dan legalitas.",
-    image: secangkirAsset.url,
+    image: resolveAssetUrl(secangkirAsset.url),
     imageAlt: "Produk teh kelor dan secang dari Desa Klepu",
     activeStatus: "Aktif",
     readiness: "Aktif dikembangkan",
@@ -367,7 +375,7 @@ export const umkmList: Umkm[] = [
     category: "Kerajinan",
     product: "Tas anyaman",
     summary: "Kerajinan aktif yang dapat dikembangkan sebagai suvenir dan bagian dari paket wisata desa.",
-    image: tasAnyamanAsset.url,
+    image: resolveAssetUrl(tasAnyamanAsset.url),
     imageAlt: "Tas anyaman plastik buatan pengrajin Desa Klepu",
     activeStatus: "Aktif",
     readiness: "Aktif dikembangkan",
