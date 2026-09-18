@@ -31,6 +31,16 @@ export interface Opportunity {
   name: string;
   investment: string;
   detail: string;
+  recommended?: boolean;
+  recommendedReason?: string;
+}
+
+export interface InvestmentScore {
+  distribution: number;
+  technology: number;
+  market: number;
+  finance: number;
+  materials: number;
 }
 
 export interface Umkm {
@@ -48,6 +58,9 @@ export interface Umkm {
   investment: string;
   investmentUse: string[];
   market: string;
+  marketTargets?: string[];
+  marketNote?: string;
+  score: InvestmentScore;
   opportunityContext: string;
   opportunities: Opportunity[];
   risks: string[];
@@ -77,6 +90,15 @@ const coffeeShared = {
   investment: "Rp20–28 juta",
   investmentUse: ["Mesin sangrai", "Grinder", "Sealer dan kemasan", "Modal kerja awal"],
   market: "Wisatawan, toko, kios Goa Maria, pusat oleh-oleh, reseller, dan kanal daring.",
+  marketTargets: [
+    "Wisatawan Goa Maria dan rombongan ziarah",
+    "Toko dan pusat oleh-oleh Ponorogo",
+    "Reseller kopi antarkota",
+    "Kafe dan kedai kopi lokal",
+    "Pembeli daring lewat WhatsApp dan marketplace",
+  ],
+  marketNote: "Prioritaskan wisatawan dan pusat oleh-oleh karena volume kunjungan Goa Maria paling stabil sepanjang tahun.",
+  score: { distribution: 80, technology: 70, market: 88, finance: 72, materials: 90 },
   opportunityContext: "Pengembangan produk turunan dari Kopi Liberika Klepu yang bisa dijalankan dari usaha ini.",
   risks: ["Kontinuitas pasokan kopi", "Konsistensi mutu sangrai", "Perubahan harga dan penjualan"],
   mitigations: ["Pemasok tetap", "SOP produksi", "Komitmen pembelian", "Diversifikasi produk"],
@@ -107,7 +129,7 @@ const coffeeShared = {
 
 const coffeeOpportunities: Opportunity[] = [
   { name: "Drip bag kopi", investment: "Rp6–12 juta", detail: "Kemasan sekali seduh untuk wisatawan dan pengiriman antarkota." },
-  { name: "Kopi kemasan premium", investment: "Rp8–15 juta", detail: "Ukuran 100 g dan 250 g dengan label, tanggal sangrai, dan profil rasa." },
+  { name: "Kopi kemasan premium", investment: "Rp8–15 juta", detail: "Ukuran 100 g dan 250 g dengan label, tanggal sangrai, dan profil rasa.", recommended: true, recommendedReason: "Modal paling terukur dengan kenaikan harga jual tercepat karena pasar oleh-oleh sudah tersedia." },
   { name: "Paket oleh-oleh kopi", investment: "Rp5–12 juta", detail: "Kopi digabung camilan desa sebagai satu paket suvenir." },
   { name: "Wisata kopi", investment: "Rp15–30 juta", detail: "Kunjungan kebun, sangrai, dan seduh bersama untuk rombongan wisata." },
 ];
@@ -220,9 +242,17 @@ export const umkmList: Umkm[] = [
     investment: "Rp10–20 juta",
     investmentUse: ["Pengering", "Grinder", "Alat pengemas", "Pengurusan izin"],
     market: "Pasar oleh-oleh dan minuman herbal di Desa Klepu dan sekitarnya.",
+    marketTargets: [
+      "Pengunjung wisata desa dan Goa Maria",
+      "Pembeli minuman herbal keluarga",
+      "Toko oleh-oleh dan apotek herbal",
+      "Kedai dan kafe yang menyediakan menu sehat",
+    ],
+    marketNote: "Segmen minuman sehat tumbuh cepat; kemasan celup paling cocok untuk pembeli rumah tangga dan oleh-oleh.",
+    score: { distribution: 68, technology: 62, market: 74, finance: 60, materials: 88 },
     opportunityContext: "Pengembangan lanjutan dari produk teh kelor–secang yang sudah dibuat.",
     opportunities: [
-      { name: "Teh celup kelor–secang", investment: "Rp8–15 juta", detail: "Kemasan celup agar lebih praktis dan tahan simpan." },
+      { name: "Teh celup kelor–secang", investment: "Rp8–15 juta", detail: "Kemasan celup agar lebih praktis dan tahan simpan.", recommended: true, recommendedReason: "Bahan sudah tersedia di desa dan kemasan celup paling mudah dijual sebagai oleh-oleh." },
       { name: "Minuman siap seduh botolan", investment: "Rp12–20 juta", detail: "Varian seduh dingin untuk kedai dan titik wisata." },
       { name: "Paket oleh-oleh herbal", investment: "Rp5–12 juta", detail: "Kotak isi teh kelor, secang, dan camilan desa." },
       { name: "Kebun kelor mitra", investment: "Rp6–12 juta", detail: "Penanaman kelor bersama warga agar pasokan bahan stabil." },
@@ -279,11 +309,19 @@ export const umkmList: Umkm[] = [
     investment: "Rp8–15 juta",
     investmentUse: ["Pemotong", "Peniris minyak", "Sealer", "Kemasan"],
     market: "Permintaan telah terbentuk melalui toko dan pembeli eceran.",
+    marketTargets: [
+      "Toko kelontong dan warung titipan",
+      "Pembeli eceran warga sekitar",
+      "Pusat oleh-oleh dan pasar wisata",
+      "Pembeli daring lewat marketplace",
+    ],
+    marketNote: "Jalur toko titipan sudah berjalan; penambahan marketplace membuka pembeli luar daerah tanpa biaya distribusi besar.",
+    score: { distribution: 78, technology: 70, market: 82, finance: 70, materials: 80 },
     opportunityContext: "Pengembangan produk turunan dari keripik tempe yang sudah diproduksi rutin.",
     opportunities: [
       { name: "Varian rasa keripik", investment: "Rp4–8 juta", detail: "Rasa pedas, balado, dan original dalam kemasan berbeda." },
       { name: "Kemasan toples oleh-oleh", investment: "Rp5–10 juta", detail: "Ukuran besar untuk pusat oleh-oleh dan pemesanan acara." },
-      { name: "Penjualan daring", investment: "Rp3–6 juta", detail: "Foto produk, kemasan aman kirim, dan toko di marketplace." },
+      { name: "Penjualan daring", investment: "Rp3–6 juta", detail: "Foto produk, kemasan aman kirim, dan toko di marketplace.", recommended: true, recommendedReason: "Modal paling ringan dan langsung memperluas pasar di luar toko titipan." },
       { name: "Kapasitas produksi ganda", investment: "Rp10–18 juta", detail: "Pemotong dan peniris tambahan untuk melipatgandakan hasil." },
     ],
     risks: ["Kapasitas manual", "Mutu hasil penggorengan", "Kelengkapan dokumen legalitas"],
@@ -336,9 +374,17 @@ export const umkmList: Umkm[] = [
     investment: "Rp5–10 juta",
     investmentUse: ["Bahan", "Peralatan", "Pengembangan desain", "Kemasan"],
     market: "Wisatawan, paket suvenir, dan pemasaran oleh Pokdarwis.",
+    marketTargets: [
+      "Wisatawan dan rombongan kunjungan desa",
+      "Paket suvenir acara dan instansi",
+      "Toko kerajinan dan galeri lokal",
+      "Pembeli daring pencari produk anyaman",
+    ],
+    marketNote: "Pesanan merchandise instansi memberi volume besar sekali pesan, cocok dipadukan dengan penjualan suvenir harian.",
+    score: { distribution: 62, technology: 60, market: 66, finance: 58, materials: 75 },
     opportunityContext: "Pengembangan lini produk anyaman dari keterampilan pengrajin yang sudah ada.",
     opportunities: [
-      { name: "Suvenir anyaman kecil", investment: "Rp3–6 juta", detail: "Dompet, tempat tisu, dan gantungan untuk harga terjangkau." },
+      { name: "Suvenir anyaman kecil", investment: "Rp3–6 juta", detail: "Dompet, tempat tisu, dan gantungan untuk harga terjangkau.", recommended: true, recommendedReason: "Harga terjangkau, cepat laku di titik wisata, dan modalnya paling kecil." },
       { name: "Katalog desain baru", investment: "Rp4–8 juta", detail: "Variasi ukuran, warna, dan motif khas Klepu." },
       { name: "Pesanan merchandise", investment: "Rp5–10 juta", detail: "Tas berlogo untuk instansi, acara desa, dan wisata rombongan." },
       { name: "Kelas anyaman wisata", investment: "Rp6–12 juta", detail: "Pengalaman membuat anyaman bagi pengunjung desa." },
@@ -393,9 +439,17 @@ export const umkmList: Umkm[] = [
     investment: "Disesuaikan dengan rencana pengembangan",
     investmentUse: ["Pengadaan peralatan dapur dan display", "Pemetaan kapasitas layanan", "Penyusunan rencana investasi"],
     market: "Pelanggan kuliner lokal dan wisatawan desa.",
+    marketTargets: [
+      "Warga dan pelanggan kuliner harian",
+      "Rombongan wisata dan peziarah",
+      "Acara desa dan pertemuan komunitas",
+      "Pembeli oleh-oleh produk UMKM desa",
+    ],
+    marketNote: "Kedai menjadi etalase paling strategis: satu lokasi melayani pelanggan harian sekaligus menjual produk UMKM lain.",
+    score: { distribution: 72, technology: 58, market: 70, finance: 55, materials: 78 },
     opportunityContext: "Pengembangan layanan kedai sebagai etalase produk kuliner Desa Klepu.",
     opportunities: [
-      { name: "Menu kopi Liberika Klepu", investment: "Rp8–15 juta", detail: "Mesin seduh dan menu kopi desa sebagai menu utama kedai." },
+      { name: "Menu kopi Liberika Klepu", investment: "Rp8–15 juta", detail: "Mesin seduh dan menu kopi desa sebagai menu utama kedai.", recommended: true, recommendedReason: "Menghubungkan kedai dengan produk unggulan desa dan menaikkan nilai jual per kunjungan." },
       { name: "Sudut oleh-oleh desa", investment: "Rp5–12 juta", detail: "Rak penjualan keripik, teh kelor, dan anyaman warga." },
       { name: "Paket makan rombongan", investment: "Rp6–12 juta", detail: "Menu dan peralatan saji untuk tamu wisata berkelompok." },
       { name: "Area kumpul dan acara", investment: "Rp10–20 juta", detail: "Penataan tempat duduk untuk acara kecil dan pertemuan warga." },
