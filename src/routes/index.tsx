@@ -61,13 +61,7 @@ function HomePage() {
                 ))}
               </div>
             </div>
-            <div className="relative pb-4">
-              <img src={heroImage} alt="Kopi, keripik tempe, tas anyaman, kelor, dan secang dari ekonomi lokal Desa Klepu" width={1200} height={1104} fetchPriority="high" className="aspect-[6/5] w-full rounded-[2.5rem] object-cover shadow-[0_18px_0_var(--shadow-soft)]" />
-              <div className="absolute -bottom-1 left-2 -rotate-2 rounded-2xl bg-accent px-4 py-3 shadow-clay-dark sm:-left-4">
-                <p className="font-display text-sm font-bold">Kopi Liberika</p>
-                <p className="text-[11px] text-accent-foreground/70">Indikatif Rp20–28 juta</p>
-              </div>
-            </div>
+            <HeroCarousel />
           </div>
         </section>
 
