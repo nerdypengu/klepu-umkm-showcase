@@ -2,8 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Check, CircleAlert, MapPin, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
-import { StatusBadge } from "@/components/status-badge";
-import { getUmkm, umkmList, widerOpportunities } from "@/lib/umkm-data";
+import { getUmkm, umkmList } from "@/lib/umkm-data";
 
 export const Route = createFileRoute("/umkm/$slug")({
   loader: ({ params }) => {
