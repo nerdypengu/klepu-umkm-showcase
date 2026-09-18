@@ -279,7 +279,23 @@ export const umkmList: Umkm[] = [
       { label: "Harga", value: "Rp4.000 toko; Rp4.500–5.000 eceran" },
       { label: "Tenaga kerja", value: "Pemilik dan satu orang" },
       { label: "Produksi bulanan", value: "Sekitar 960–1.000 kemasan" },
+      { label: "Penilaian kesiapan", value: "Siap bersyarat" },
     ],
+    operations: [
+      { label: "Bahan baku", value: "Kedelai/tempe dari agen Sombro (terkonfirmasi)" },
+      { label: "Pemakaian bahan", value: "4–4,5 kg per sekali produksi" },
+      { label: "Kebutuhan alat", value: "Pemotong, peniris minyak, sealer, dan kemasan" },
+      { label: "Kanal penjualan", value: "Toko titipan dan pembeli eceran" },
+      { label: "Legalitas", value: "NIB, PIRT, dan halal masih perlu diperiksa dokumennya" },
+    ],
+    roles: [
+      { label: "Pelaksana utama", value: "UMKM Ibu Ros" },
+      { label: "Pokdarwis Jayandaru", value: "Pemasaran sebagai oleh-oleh desa" },
+      { label: "BUMDes / Pemerintah Desa", value: "Distribusi, bantuan alat, dan pengurusan izin" },
+    ],
+    gaps: ["Catatan keuangan usaha", "Data tenaga kerja", "Penawaran harga alat"],
+    priority: "Prioritas 2 dari 8 peluang desa — produksi dan permintaan sudah terbentuk.",
+    potentials: ["POT-012 Kedelai/tempe — agen Sombro (terkonfirmasi)"],
   },
   {
     id: "UMKM-006",
