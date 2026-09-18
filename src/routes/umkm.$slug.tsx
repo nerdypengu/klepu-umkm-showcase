@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, ArrowRight, Check, CircleAlert, ListChecks, MapPin, MessageCircle, Sprout, Target, Users } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, CircleAlert, Clock, ListChecks, MapPin, MessageCircle, Sprout, Target, TrendingUp, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { InvestmentChart } from "@/components/investment-chart";
@@ -118,6 +118,29 @@ function UmkmDetailPage() {
             <InfoList title="Persiapan pengembangan" icon={<Check />} items={item.prerequisites} tone="neutral" />
           </div>
         </section>
+
+        {item.roiSimulation && (
+          <section className="mx-auto max-w-6xl px-5 pb-16 sm:px-6">
+            <div className="rounded-[1.75rem] border border-border bg-card p-6 shadow-clay sm:p-8">
+              <p className="font-display text-xs font-bold uppercase text-primary">Simulasi hasil investasi</p>
+              <h2 className="mt-2 font-display text-3xl font-extrabold">Perkiraan hasil untuk investor</h2>
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                <div className="rounded-2xl bg-primary p-6 text-primary-foreground shadow-clay-dark">
+                  <div className="grid size-10 place-items-center rounded-xl bg-primary-foreground/15"><TrendingUp className="size-5" /></div>
+                  <p className="mt-4 text-xs font-bold uppercase text-primary-foreground/70">Estimasi ROI</p>
+                  <p className="mt-1 font-display text-4xl font-extrabold">{item.roiSimulation.roi}</p>
+                </div>
+                <div className="rounded-2xl bg-secondary p-6">
+                  <div className="grid size-10 place-items-center rounded-xl bg-background text-primary"><Clock className="size-5" /></div>
+                  <p className="mt-4 text-xs font-bold uppercase text-muted-foreground">Estimasi balik modal</p>
+                  <p className="mt-1 font-display text-4xl font-extrabold text-primary">{item.roiSimulation.payback}</p>
+                </div>
+              </div>
+              <p className="mt-5 max-w-3xl text-sm leading-relaxed text-muted-foreground">{item.roiSimulation.basis}</p>
+              <p className="mt-3 max-w-3xl text-xs leading-relaxed text-muted-foreground">Angka di atas merupakan simulasi indikatif untuk gambaran awal, bukan janji hasil. Perhitungan final disusun bersama pemilik usaha berdasarkan data penjualan dan biaya aktual.</p>
+            </div>
+          </section>
+        )}
 
         {(item.roles || item.gaps || typeof item.priorityRank === "number") && (
           <section className="mx-auto max-w-6xl px-5 pb-16 sm:px-6">
