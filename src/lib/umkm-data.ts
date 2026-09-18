@@ -93,7 +93,9 @@ const coffeeShared = {
     { label: "BUMDes / Pemerintah Desa", value: "Pengadaan mesin bersama dan fasilitasi" },
   ],
   gaps: ["Perhitungan HPP per kemasan", "Target penjualan historis", "Finalisasi dokumen izin", "Kerja sama volume pasokan kopi"],
-  priority: "Prioritas 1 dari 8 peluang desa — produk dan pasarnya sudah tersedia.",
+  priorityRank: 1,
+  priorityTotal: 8,
+  prioritySummary: "Produk dan pasarnya sudah tersedia.",
   potentials: ["POT-001 Kopi Liberika — kebun Klepu / Banyu Putih"],
 };
 
