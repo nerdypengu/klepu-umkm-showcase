@@ -1,0 +1,3 @@
+# Supabase CLI configuration template
+# Copy this file to config.toml and insert your project ID
+project_id = "your-supabase-project-id"

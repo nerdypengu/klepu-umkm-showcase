@@ -37,3 +37,8 @@ dist-ssr
 # Lovable configuration & plans
 .lovable
 
+# Supabase
+supabase/config.toml
+supabase/.temp/
+supabase/.branches/
+
