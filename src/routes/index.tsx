@@ -4,6 +4,15 @@ import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { UmkmCard } from "@/components/umkm-card";
+import { VisiSection } from "@/components/visi-section";
+import { Highlight } from "@/components/highlight";
+import { B2bSection } from "@/components/b2b-section";
+import { SectionBackdrop } from "@/components/section-backdrop";
+import { Reveal } from "@/components/reveal";
+import { UmkmSummarySection } from "@/components/umkm-summary-section";
+import { PotentialsSection } from "@/components/potentials-section";
+import { PartnerStepsSection } from "@/components/partner-steps-section";
+import { fetchPotentials } from "@/lib/potentials.functions";
 import heroImage from "@/assets/klepu-hero.jpg";
 import { type Category, type Umkm } from "@/lib/umkm-data";
 import { fetchUmkmList } from "@/lib/umkm.functions";
@@ -22,7 +31,10 @@ export const Route = createFileRoute("/")({
       { name: "twitter:description", content: "Jelajahi peluang investasi UMKM aktif & potensi ekonomi kreatif Desa Klepu, Sooko, Ponorogo." },
     ],
   }),
-  loader: () => fetchUmkmList(),
+  loader: async () => {
+    const [umkmList, potentials] = await Promise.all([fetchUmkmList(), fetchPotentials()]);
+    return { umkmList, potentials };
+  },
   errorComponent: () => <div className="p-10 text-center">Data UMKM belum dapat dimuat. Coba muat ulang halaman.</div>,
   component: HomePage,
 });
@@ -30,7 +42,7 @@ export const Route = createFileRoute("/")({
 const categories = ["Semua", "Kopi", "Herbal", "Makanan", "Kerajinan", "Kuliner"] as const;
 
 function HomePage() {
-  const umkmList = Route.useLoaderData();
+  const { umkmList, potentials } = Route.useLoaderData();
   const [category, setCategory] = useState<(typeof categories)[number]>("Semua");
   const filtered = useMemo(() => category === "Semua" ? umkmList : umkmList.filter((item) => item.category === category as Category), [category, umkmList]);
 
@@ -38,17 +50,18 @@ function HomePage() {
     <div className="min-h-screen bg-background text-foreground antialiased">
       <SiteHeader />
       <main>
+        <SectionBackdrop variant="hero">
         <section id="beranda" className="mx-auto max-w-6xl px-5 pb-12 pt-10 sm:px-6 lg:pt-14">
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <div>
               <h1 className="max-w-xl font-display text-5xl font-extrabold leading-[1.02] sm:text-6xl">
-                Investasi yang tumbuh <span className="text-primary">dari desa.</span>
+                Dukung usaha desa, <Highlight>tumbuh bersama</Highlight> Klepu.
               </h1>
               <p className="mt-5 max-w-lg text-lg leading-relaxed text-muted-foreground">
-                Mengenal potensi tujuh UMKM aktif serta kelompok tani, peternakan, dan wisata Desa Klepu—lengkap dengan kesiapan, kebutuhan, dan peluang pengembangannya.
+                Kopi liberika, herbal kelor-secang, keripik tempe, anyaman. Tujuh UMKM Desa Klepu sudah berjalan dan terbuka untuk mitra. Pelajari profilnya, lalu <Highlight>hubungi pengelolanya langsung</Highlight>.
               </p>
               <div className="mt-7 flex flex-wrap gap-3">
-                <Button asChild variant="clay" size="lg"><Link to="/" hash="umkm">Lihat UMKM <ArrowRight /></Link></Button>
+                <Button asChild variant="clay" size="lg"><Link to="/" hash="umkm">Jelajahi UMKM <ArrowRight /></Link></Button>
                 <Button asChild variant="outline" size="lg" className="h-11 rounded-2xl shadow-clay"><a href="https://klepu-sooko.desa.id/" target="_blank" rel="noreferrer">Website Desa</a></Button>
               </div>
               <div className="mt-9 grid max-w-xl grid-cols-2 gap-4 sm:grid-cols-3">
@@ -67,25 +80,49 @@ function HomePage() {
             <HeroCarousel umkmList={umkmList} />
           </div>
         </section>
+        </SectionBackdrop>
 
+        <SectionBackdrop variant="tint">
+          <VisiSection />
+        </SectionBackdrop>
+
+        <SectionBackdrop variant="grid">
+          <UmkmSummarySection />
+        </SectionBackdrop>
+
+        <SectionBackdrop variant="wave" className="mt-16 py-6">
         <section id="umkm" className="mx-auto max-w-6xl scroll-mt-20 px-5 py-16 sm:px-6">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <Reveal className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="font-display text-xs font-bold uppercase text-primary">Lapak Desa</p>
-              <h2 className="mt-1 font-display text-3xl font-extrabold sm:text-4xl">Pilih UMKM, lihat potensinya</h2>
-              <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">Setiap profil memuat fakta usaha, kebutuhan modal, serta peluang pengembangan produknya.</p>
+              <h2 className="mt-1 font-display text-3xl font-extrabold sm:text-4xl">Pilih UMKM, <Highlight>lihat potensinya</Highlight></h2>
+              <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">Di setiap profil, kebutuhan modal, risiko, dan simulasi hasilnya sudah tertulis. Anda bisa menimbang dulu sebelum menghubungi siapa pun.</p>
             </div>
             <div className="flex flex-wrap gap-2" role="group" aria-label="Filter kategori UMKM">
               {categories.map((item) => (
                 <Button key={item} type="button" size="sm" variant={category === item ? "clay" : "outline"} onClick={() => setCategory(item)} className={cn("rounded-xl", category !== item && "shadow-none")}>{item}</Button>
               ))}
             </div>
-          </div>
+          </Reveal>
           <div className="mt-9 grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
-            {filtered.map((item) => <UmkmCard key={item.id} item={item} />)}
+            {filtered.map((item, index) => (
+              <Reveal key={item.id} delay={(index % 3) * 90} className="h-full"><UmkmCard item={item} /></Reveal>
+            ))}
           </div>
         </section>
+        </SectionBackdrop>
 
+        <SectionBackdrop variant="warm">
+          <PotentialsSection potentials={potentials} />
+        </SectionBackdrop>
+
+        <SectionBackdrop variant="tint">
+          <B2bSection umkmList={umkmList} />
+        </SectionBackdrop>
+
+        <SectionBackdrop variant="rings">
+          <PartnerStepsSection />
+        </SectionBackdrop>
       </main>
       <SiteFooter />
     </div>
@@ -122,6 +159,8 @@ function HeroCarousel({ umkmList }: { umkmList: Umkm[] }) {
             width={1200}
             height={1000}
             fetchPriority={index === 0 ? "high" : "low"}
+            loading={index === 0 ? "eager" : "lazy"}
+            decoding="async"
             className={cn("absolute inset-0 size-full object-cover transition-opacity duration-700 motion-reduce:transition-none", index === active ? "opacity-100" : "opacity-0")}
             aria-hidden={index === active ? undefined : true}
           />

@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
+import { FadeImage } from "@/components/fade-image";
 import type { Umkm } from "@/lib/umkm-data";
 
 export function UmkmCard({ item }: { item: Umkm }) {
@@ -10,12 +11,11 @@ export function UmkmCard({ item }: { item: Umkm }) {
       className="group flex h-full flex-col rounded-[1.75rem] bg-card p-4 shadow-clay transition-all duration-300 hover:-translate-y-1 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4"
     >
       <div className="overflow-hidden rounded-2xl">
-        <img
+        <FadeImage
           src={item.image}
           alt={item.imageAlt}
           width={800}
           height={640}
-          loading="lazy"
           className="aspect-[4/3] w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
       </div>

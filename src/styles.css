@@ -121,6 +121,7 @@
   --recommendation-soft: oklch(0.93 0.035 20);
   --shadow-soft: oklch(0.86 0.008 20);
   --shadow-strong: oklch(0.38 0.12 25);
+  --band: color-mix(in oklch, var(--primary) 9%, var(--background));
 }
 
 .dark {
@@ -178,4 +179,54 @@
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
+
+/* Decorative section backgrounds and scroll reveal */
+@keyframes drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(4%, 7%, 0) scale(1.1); }
+}
+
+.blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(72px);
+  pointer-events: none;
+  animation: drift 20s ease-in-out infinite;
+}
+
+.reveal[data-reveal="hidden"] {
+  opacity: 0;
+  transform: translate3d(0, 28px, 0);
+}
+
+.reveal[data-reveal="shown"] {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms);
+}
+
+/* Page transitions (View Transitions API) */
+@keyframes page-out {
+  to { opacity: 0; transform: translateY(-6px); }
+}
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(10px); }
+}
+@keyframes pending-sweep {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(300%); }
+}
+
+::view-transition-old(root) { animation: page-out 0.18s ease-in both; }
+::view-transition-new(root) { animation: page-in 0.32s cubic-bezier(0.22, 1, 0.36, 1) both; }
+/* The header stays put while the page content swaps. */
+.site-header { view-transition-name: site-header; }
+::view-transition-group(site-header) { animation-duration: 0s; }
+
+.route-pending-bar { animation: pending-sweep 1.1s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
 }
