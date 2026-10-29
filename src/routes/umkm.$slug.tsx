@@ -2,9 +2,11 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Check, CircleAlert, Clock, ListChecks, MapPin, MessageCircle, Sparkles, Sprout, Target, TrendingUp, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
+import { LazyVideo } from "@/components/lazy-video";
 import { InvestmentPie } from "@/components/investment-pie";
 import { InvestmentScoreCard } from "@/components/investment-score";
 import { fetchUmkmList } from "@/lib/umkm.functions";
+import { AjukanMinatDialog } from "@/components/ajukan-minat-dialog";
 
 export const Route = createFileRoute("/umkm/$slug")({
   loader: async ({ params }) => {
@@ -107,7 +109,9 @@ function UmkmDetailPage() {
                   <p className="text-xs font-bold uppercase text-muted-foreground">Modal indikatif</p>
                   <p className="mt-1 font-display text-4xl font-extrabold text-primary">{item.investment}</p>
                   <div className="mt-6 border-t border-border pt-5"><p className="text-sm font-bold">Penggunaan dana</p><ul className="mt-3 space-y-2">{item.investmentUse.map((use) => <li key={use} className="flex gap-2 text-sm text-muted-foreground"><Check className="mt-0.5 size-4 shrink-0 text-primary" />{use}</li>)}</ul></div>
-                  <Button asChild variant="clay" size="lg" className="mt-7 w-full"><a href="https://klepu-sooko.desa.id/" target="_blank" rel="noreferrer">Nyatakan minat <ArrowRight /></a></Button>
+                  <div className="mt-7">
+                    <AjukanMinatDialog umkmId={item.id} umkmName={item.name} defaultNominal={item.investment} />
+                  </div>
                   {(item.whatsapp || item.mapsUrl) && (
                     <div className="mt-3 grid grid-cols-2 gap-2">
                       {item.whatsapp && <Button asChild variant="outline" size="sm"><a href={item.whatsapp} target="_blank" rel="noreferrer"><MessageCircle /> WhatsApp</a></Button>}
@@ -225,7 +229,7 @@ function UmkmDetailPage() {
               <p className="mt-3 max-w-2xl leading-relaxed text-muted-foreground">Dokumentasi produk dan proses usaha {item.name}.</p>
               <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 {item.videos.map((video, index) => (
-                  <video key={video.src} src={video.src} poster={video.poster} autoPlay loop muted playsInline className="aspect-[3/4] w-full rounded-2xl border border-border bg-muted object-cover shadow-clay" aria-label={`Video ${item.name} ${index + 1}`} />
+                  <LazyVideo key={video.src} src={video.src} poster={video.poster} className="aspect-[3/4] w-full rounded-2xl border border-border bg-muted object-cover shadow-clay" aria-label={`Video ${item.name} ${index + 1}`} />
                 ))}
               </div>
             </div>
