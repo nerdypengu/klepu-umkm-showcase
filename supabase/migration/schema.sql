@@ -141,7 +141,8 @@ CREATE TABLE IF NOT EXISTS public.umkm_scores (
     priority_rank INTEGER,
     priority_total INTEGER,
     priority_summary TEXT,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
 -- 4.4 ROI Simulation Table
@@ -891,6 +892,15 @@ LANGUAGE plpgsql
 SECURITY DEFINER
 SET search_path = public
 AS $$
+DECLARE
+    v_total_active INT;
+    r RECORD;
+    v_rank INT;
+    v_mat INT;
+    v_mkt INT;
+    v_dis INT;
+    v_fin INT;
+    v_tec INT;
 BEGIN
     PERFORM public.verify_admin_session(p_admin_token);
 
@@ -901,6 +911,7 @@ BEGIN
         RAISE EXCEPTION 'Slug UMKM wajib diisi';
     END IF;
 
+    -- Upsert main record
     INSERT INTO public.umkm (id, slug, data, sort_order, updated_at)
     VALUES (
         trim(p_id),
@@ -915,11 +926,82 @@ BEGIN
         sort_order = coalesce(p_sort_order, public.umkm.sort_order),
         updated_at = now();
 
+    -- Upsert primary slug
     INSERT INTO public.umkm_slugs (slug, umkm_id, is_primary)
     VALUES (trim(p_slug), trim(p_id), true)
     ON CONFLICT (slug) DO UPDATE SET
         umkm_id = excluded.umkm_id,
         is_primary = true;
+
+    -- Count active UMKMs
+    SELECT count(*) INTO v_total_active
+    FROM public.umkm
+    WHERE coalesce(data->>'activeStatus', 'Aktif') NOT IN ('Nonaktif', 'Dihapus');
+
+    -- Auto-recalculate ranks for all active UMKMs based on score
+    v_rank := 1;
+    FOR r IN
+        SELECT id,
+               (
+                 coalesce((data->'score'->>'materials')::int, 0) +
+                 coalesce((data->'score'->>'market')::int, 0) +
+                 coalesce((data->'score'->>'distribution')::int, 0) +
+                 coalesce((data->'score'->>'finance')::int, 0) +
+                 coalesce((data->'score'->>'technology')::int, 0)
+               ) / 5 AS total_score,
+               data->'score' AS s
+        FROM public.umkm
+        WHERE coalesce(data->>'activeStatus', 'Aktif') NOT IN ('Nonaktif', 'Dihapus')
+        ORDER BY total_score DESC, id ASC
+    LOOP
+        UPDATE public.umkm
+        SET data = jsonb_set(
+            jsonb_set(data, '{priorityRank}', to_jsonb(v_rank)),
+            '{priorityTotal}',
+            to_jsonb(v_total_active)
+        )
+        WHERE id = r.id;
+
+        -- Also sync into public.umkm_scores table
+        IF r.s IS NOT NULL THEN
+            v_mat := coalesce((r.s->>'materials')::int, 0);
+            v_mkt := coalesce((r.s->>'market')::int, 0);
+            v_dis := coalesce((r.s->>'distribution')::int, 0);
+            v_fin := coalesce((r.s->>'finance')::int, 0);
+            v_tec := coalesce((r.s->>'technology')::int, 0);
+
+            INSERT INTO public.umkm_scores (
+                umkm_id,
+                score_market,
+                score_finance,
+                score_materials,
+                score_technology,
+                score_distribution,
+                priority_rank,
+                priority_total
+            ) VALUES (
+                r.id,
+                v_mkt,
+                v_fin,
+                v_mat,
+                v_tec,
+                v_dis,
+                v_rank,
+                v_total_active
+            )
+            ON CONFLICT (umkm_id) DO UPDATE SET
+                score_market = EXCLUDED.score_market,
+                score_finance = EXCLUDED.score_finance,
+                score_materials = EXCLUDED.score_materials,
+                score_technology = EXCLUDED.score_technology,
+                score_distribution = EXCLUDED.score_distribution,
+                priority_rank = EXCLUDED.priority_rank,
+                priority_total = EXCLUDED.priority_total,
+                updated_at = now();
+        END IF;
+
+        v_rank := v_rank + 1;
+    END LOOP;
 
     RETURN jsonb_build_object('success', true, 'id', p_id, 'slug', p_slug);
 END;
@@ -1054,6 +1136,27 @@ FOR INSERT WITH CHECK (bucket_id = 'investment-proposals');
 DROP POLICY IF EXISTS "Allow proposal reads" ON storage.objects;
 CREATE POLICY "Allow proposal reads" ON storage.objects
 FOR SELECT USING (bucket_id = 'investment-proposals');
+
+-- umkm-media bucket & policies
+INSERT INTO storage.buckets (id, name, public, file_size_limit)
+VALUES ('umkm-media', 'umkm-media', true, 52428800)
+ON CONFLICT (id) DO UPDATE SET public = true, file_size_limit = 52428800;
+
+DROP POLICY IF EXISTS "Allow umkm media reads" ON storage.objects;
+CREATE POLICY "Allow umkm media reads" ON storage.objects
+FOR SELECT USING (bucket_id = 'umkm-media');
+
+DROP POLICY IF EXISTS "Allow umkm media uploads" ON storage.objects;
+CREATE POLICY "Allow umkm media uploads" ON storage.objects
+FOR INSERT WITH CHECK (bucket_id = 'umkm-media');
+
+DROP POLICY IF EXISTS "Allow umkm media deletes" ON storage.objects;
+CREATE POLICY "Allow umkm media deletes" ON storage.objects
+FOR DELETE USING (bucket_id = 'umkm-media');
+
+DROP POLICY IF EXISTS "Allow umkm media updates" ON storage.objects;
+CREATE POLICY "Allow umkm media updates" ON storage.objects
+FOR UPDATE USING (bucket_id = 'umkm-media') WITH CHECK (bucket_id = 'umkm-media');
 
 
 -- ============================================================================

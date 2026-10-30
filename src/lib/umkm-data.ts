@@ -31,6 +31,7 @@ export interface Umkm {
   summary: string;
   image: string;
   imageAlt: string;
+  photos?: string[];
   activeStatus: string;
   readiness: string;
   investment: string;

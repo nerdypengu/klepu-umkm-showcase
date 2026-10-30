@@ -389,6 +389,7 @@ export type Database = {
           priority_total: number | null;
           priority_summary: string | null;
           created_at: string;
+          updated_at: string;
         };
         Insert: {
           id?: string;
@@ -402,6 +403,7 @@ export type Database = {
           priority_total?: number | null;
           priority_summary?: string | null;
           created_at?: string;
+          updated_at?: string;
         };
         Update: {
           id?: string;
@@ -415,6 +417,7 @@ export type Database = {
           priority_total?: number | null;
           priority_summary?: string | null;
           created_at?: string;
+          updated_at?: string;
         };
       };
       umkm_roi: {

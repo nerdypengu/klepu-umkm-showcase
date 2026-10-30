@@ -236,6 +236,23 @@ function UmkmDetailPage() {
           </section>
         )}
 
+        {item.photos && item.photos.length > 0 && (
+          <section className="border-y border-border bg-background">
+            <div className="mx-auto max-w-6xl px-5 py-14 sm:px-6">
+              <p className="font-display text-xs font-bold uppercase text-primary">Galeri Foto</p>
+              <h2 className="mt-2 font-display text-3xl font-extrabold sm:text-4xl">Foto Produk & Aktivitas {item.name}</h2>
+              <p className="mt-3 max-w-2xl leading-relaxed text-muted-foreground">Dokumentasi kemasan, bahan baku, dan pengolahan {item.name}.</p>
+              <div className="mt-8 grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
+                {item.photos.map((photoUrl, index) => (
+                  <div key={index} className="overflow-hidden rounded-2xl border border-border shadow-clay">
+                    <img src={photoUrl} alt={`${item.name} foto ${index + 1}`} className="aspect-[4/3] w-full object-cover transition-transform duration-300 hover:scale-105" loading="lazy" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
         <section className="border-y border-border bg-card">
           <div className="mx-auto max-w-6xl px-5 py-14 sm:px-6">
             <p className="font-display text-xs font-bold uppercase text-primary">Peluang produk</p>

@@ -3,11 +3,12 @@ import * as React from "react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
-import { AdminUmkmDialog } from "@/components/admin-umkm-dialog";
+import { AdminUmkmEditor } from "@/components/admin-umkm-dialog";
 import { AdminMinatDetailDialog } from "@/components/admin-minat-detail-dialog";
 import { fetchUmkmList } from "@/lib/umkm.functions";
-import type { Umkm } from "@/lib/umkm-data";
+import { scoreTotal, type Umkm } from "@/lib/umkm-data";
 import {
   getAdminDashboardStatsServerFn,
   getAdminMitraListServerFn,
@@ -76,8 +77,8 @@ function AdminDashboardPage() {
   const [searchUmkm, setSearchUmkm] = React.useState("");
   const [filterUmkmCategory, setFilterUmkmCategory] = React.useState<string>("all");
 
-  // UMKM CRUD modal state
-  const [isUmkmDialogOpen, setIsUmkmDialogOpen] = React.useState(false);
+  // UMKM CRUD page state (1 halaman penuh)
+  const [isEditingUmkm, setIsEditingUmkm] = React.useState(false);
   const [editingUmkm, setEditingUmkm] = React.useState<Partial<Umkm> | null>(null);
   const [isSavingUmkm, setIsSavingUmkm] = React.useState(false);
   const [umkmFormError, setUmkmFormError] = React.useState<string | null>(null);
@@ -159,9 +160,17 @@ function AdminDashboardPage() {
         if (selectedMinat?.id === minatId) {
           setSelectedMinat((prev) => (prev ? { ...prev, status: status as AdminMinatItem["status"], adminNotes: notes } : null));
         }
+        toast.success("Status minat berhasil diperbarui", {
+          description: `Status diubah menjadi: ${status.replace(/_/g, " ")}`,
+        });
+      } else {
+        toast.error("Gagal memperbarui status minat", {
+          description: res.error || "Terjadi kesalahan pada server",
+        });
       }
     } catch (e) {
       console.error("Gagal update status & catatan:", e);
+      toast.error("Terjadi kesalahan saat memperbarui status minat");
     } finally {
       setIsUpdatingStatus(null);
     }
@@ -179,15 +188,26 @@ function AdminDashboardPage() {
         },
       });
       if (res.success) {
-        setIsUmkmDialogOpen(false);
+        setIsEditingUmkm(false);
         setEditingUmkm(null);
         const updated = await fetchUmkmList();
         setUmkms(updated);
+        toast.success("Data UMKM berhasil disimpan!", {
+          description: `Profil "${formData.name || "UMKM"}" dan peringkat skor kelayakan otomatis telah diperbarui.`,
+        });
       } else {
-        setUmkmFormError(res.error || "Gagal menyimpan data UMKM");
+        const errMsg = res.error || "Gagal menyimpan data UMKM";
+        setUmkmFormError(errMsg);
+        toast.error("Gagal menyimpan data UMKM", {
+          description: errMsg,
+        });
       }
     } catch (err: unknown) {
-      setUmkmFormError(err instanceof Error ? err.message : "Terjadi kesalahan saat menyimpan");
+      const errMsg = err instanceof Error ? err.message : "Terjadi kesalahan saat menyimpan";
+      setUmkmFormError(errMsg);
+      toast.error("Terjadi kesalahan sistem", {
+        description: errMsg,
+      });
     } finally {
       setIsSavingUmkm(false);
     }
@@ -203,11 +223,16 @@ function AdminDashboardPage() {
       if (res.success) {
         const updated = await fetchUmkmList();
         setUmkms(updated);
+        toast.success(`UMKM "${name}" berhasil dinonaktifkan`, {
+          description: "Data UMKM telah dihapus dari daftar aktif.",
+        });
       } else {
-        alert(res.error || "Gagal menghapus UMKM");
+        toast.error("Gagal menonaktifkan UMKM", {
+          description: res.error || "Terjadi kesalahan server",
+        });
       }
     } catch (e) {
-      alert("Terjadi kesalahan saat menghapus UMKM");
+      toast.error("Terjadi kesalahan saat menonaktifkan UMKM");
     }
   };
 
@@ -222,9 +247,15 @@ function AdminDashboardPage() {
             item.id === requestId ? { ...item, status: newStatus as AdminWholesaleItem["status"] } : item,
           ),
         );
+        toast.success("Status pesanan grosir diperbarui", {
+          description: `Status diubah menjadi: ${newStatus}`,
+        });
+      } else {
+        toast.error("Gagal memperbarui status grosir");
       }
     } catch (e) {
       console.error("Failed to update wholesale status:", e);
+      toast.error("Terjadi kesalahan saat memperbarui status grosir");
     } finally {
       setIsUpdatingStatus(null);
     }
@@ -285,6 +316,31 @@ function AdminDashboardPage() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
         <p className="text-sm font-semibold text-muted-foreground">Memverifikasi hak akses admin...</p>
+      </div>
+    );
+  }
+
+  // Tampilan 1 Halaman Penuh untuk Tambah & Edit UMKM
+  if (isEditingUmkm) {
+    return (
+      <div className="flex min-h-screen flex-col bg-background text-foreground">
+        <SiteHeader />
+        <main className="flex-1 px-4 py-8 sm:px-6 md:px-8">
+          <div className="mx-auto max-w-6xl">
+            <AdminUmkmEditor
+              umkm={editingUmkm}
+              onBack={() => {
+                setIsEditingUmkm(false);
+                setEditingUmkm(null);
+                setUmkmFormError(null);
+              }}
+              onSave={handleSaveUmkm}
+              isSaving={isSavingUmkm}
+              error={umkmFormError}
+            />
+          </div>
+        </main>
+        <SiteFooter />
       </div>
     );
   }
@@ -877,7 +933,7 @@ function AdminDashboardPage() {
                     onClick={() => {
                       setEditingUmkm(null);
                       setUmkmFormError(null);
-                      setIsUmkmDialogOpen(true);
+                      setIsEditingUmkm(true);
                     }}
                     variant="clay"
                     size="sm"
@@ -898,111 +954,111 @@ function AdminDashboardPage() {
                     <thead className="border-b border-border/80 bg-muted/40 font-bold uppercase tracking-wider text-muted-foreground">
                       <tr>
                         <th className="px-4 py-3">UMKM & Pemilik</th>
-                        <th className="px-4 py-3">Kategori & Produk Utama</th>
-                        <th className="px-4 py-3">Status Kesiapan & Investasi</th>
-                        <th className="px-4 py-3">Kontak & Lokasi</th>
+                        <th className="px-4 py-3">Kategori & Produk</th>
+                        <th className="px-4 py-3">Modal & Kesiapan</th>
+                        <th className="px-4 py-3 text-center">Skor & Prioritas</th>
                         <th className="px-4 py-3">Status</th>
                         <th className="px-4 py-3 text-right">Aksi</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-border/60">
-                      {filteredUmkms.map((u) => (
-                        <tr key={u.id} className="hover:bg-muted/20">
-                          <td className="px-4 py-3.5">
-                            <div className="flex items-center gap-3">
-                              {u.image ? (
-                                <img
-                                  src={u.image}
-                                  alt={u.name}
-                                  className="size-10 rounded-xl object-cover border border-border/60 shadow-sm"
-                                />
-                              ) : (
-                                <div className="grid size-10 place-items-center rounded-xl bg-primary/10 text-primary">
-                                  <Store className="size-5" />
+                      {filteredUmkms.map((u) => {
+                        const scoreVal = u.score ? scoreTotal(u.score) : null;
+                        return (
+                          <tr key={u.id} className="hover:bg-muted/20">
+                            <td className="px-4 py-3.5">
+                              <div className="flex items-center gap-3">
+                                {u.image ? (
+                                  <img
+                                    src={u.image}
+                                    alt={u.name}
+                                    className="size-10 rounded-xl object-cover border border-border/60 shadow-sm"
+                                  />
+                                ) : (
+                                  <div className="grid size-10 place-items-center rounded-xl bg-primary/10 text-primary">
+                                    <Store className="size-5" />
+                                  </div>
+                                )}
+                                <div>
+                                  <div className="font-bold text-foreground">{u.name}</div>
+                                  <div className="text-[11px] text-muted-foreground">Oleh: {u.owner}</div>
+                                  <div className="text-[10px] text-muted-foreground font-mono">/umkm/{u.slug}</div>
                                 </div>
-                              )}
-                              <div>
-                                <div className="font-bold text-foreground">{u.name}</div>
-                                <div className="text-[11px] text-muted-foreground">Oleh: {u.owner}</div>
-                                <div className="text-[10px] text-muted-foreground font-mono">/lapak/{u.slug}</div>
                               </div>
-                            </div>
-                          </td>
-                          <td className="px-4 py-3.5">
-                            <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary">
-                              {u.category}
-                            </span>
-                            <div className="mt-1 font-medium text-foreground">{u.product}</div>
-                            {u.price && (
-                              <div className="text-[11px] text-muted-foreground">Kisaran: {u.price}</div>
-                            )}
-                          </td>
-                          <td className="px-4 py-3.5">
-                            <div className="font-semibold text-foreground">{u.readiness || "Siap berkembang"}</div>
-                            <div className="text-[11px] text-muted-foreground line-clamp-1">
-                              {u.investment || u.prioritySummary || "-"}
-                            </div>
-                          </td>
-                          <td className="px-4 py-3.5">
-                            {u.whatsapp && (
-                              <div className="font-medium text-foreground">{u.whatsapp}</div>
-                            )}
-                            {u.mapsUrl ? (
-                              <a
-                                href={u.mapsUrl}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="inline-flex items-center gap-1 text-[11px] text-primary hover:underline"
+                            </td>
+                            <td className="px-4 py-3.5">
+                              <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary">
+                                {u.category}
+                              </span>
+                              <div className="mt-1 font-medium text-foreground">{u.product}</div>
+                              {u.price && (
+                                <div className="text-[11px] text-muted-foreground">Kisaran: {u.price}</div>
+                              )}
+                            </td>
+                            <td className="px-4 py-3.5">
+                              <div className="font-bold text-primary">{u.investment || "-"}</div>
+                              <div className="text-[11px] text-muted-foreground">{u.readiness || "Siap berkembang"}</div>
+                            </td>
+                            <td className="px-4 py-3.5 text-center">
+                              {scoreVal !== null ? (
+                                <div className="inline-flex flex-col items-center">
+                                  <span className="rounded-full bg-primary/10 px-2.5 py-0.5 font-display text-xs font-black text-primary">
+                                    {scoreVal} / 100
+                                  </span>
+                                  {u.priorityRank && (
+                                    <span className="mt-0.5 text-[10px] font-semibold text-muted-foreground">
+                                      Prioritas #{u.priorityRank}
+                                    </span>
+                                  )}
+                                </div>
+                              ) : (
+                                <span className="text-muted-foreground">-</span>
+                              )}
+                            </td>
+                            <td className="px-4 py-3.5">
+                              <span
+                                className={`inline-block rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${
+                                  u.activeStatus === "Nonaktif" || u.activeStatus === "Dihapus"
+                                    ? "bg-destructive/10 text-destructive"
+                                    : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                                }`}
                               >
-                                Maps <ExternalLink className="size-2.5" />
-                              </a>
-                            ) : (
-                              <span className="text-[11px] text-muted-foreground">-</span>
-                            )}
-                          </td>
-                          <td className="px-4 py-3.5">
-                            <span
-                              className={`inline-block rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${
-                                u.activeStatus === "Nonaktif" || u.activeStatus === "Dihapus"
-                                  ? "bg-destructive/10 text-destructive"
-                                  : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-                              }`}
-                            >
-                              {u.activeStatus || "Aktif"}
-                            </span>
-                          </td>
-                          <td className="px-4 py-3.5 text-right">
-                            <div className="flex items-center justify-end gap-1">
-                              <Button asChild variant="ghost" size="sm" className="size-8 p-0" title="Lihat Halaman">
-                                <Link to="/lapak/$slug" params={{ slug: u.slug }} target="_blank">
-                                  <ExternalLink className="size-4" />
-                                </Link>
-                              </Button>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="h-8 gap-1 text-xs"
-                                onClick={() => {
-                                  setEditingUmkm(u);
-                                  setUmkmFormError(null);
-                                  setIsUmkmDialogOpen(true);
-                                }}
-                              >
-                                <Edit3 className="size-3.5" /> Edit
-                              </Button>
-                              <Button
-                                variant="destructive"
-                                size="sm"
-                                className="size-8 p-0"
-                                title="Hapus / Nonaktifkan"
-                                onClick={() => handleDeleteUmkm(u.id, u.name)}
-                              >
-                                <Trash2 className="size-3.5" />
-                              </Button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
+                                {u.activeStatus || "Aktif"}
+                              </span>
+                            </td>
+                            <td className="px-4 py-3.5 text-right">
+                              <div className="flex items-center justify-end gap-1">
+                                <Button asChild variant="ghost" size="sm" className="size-8 p-0" title="Lihat Halaman">
+                                  <Link to="/umkm/$slug" params={{ slug: u.slug }} target="_blank">
+                                    <ExternalLink className="size-4" />
+                                  </Link>
+                                </Button>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="h-8 gap-1 text-xs"
+                                  onClick={() => {
+                                    setEditingUmkm(u);
+                                    setUmkmFormError(null);
+                                    setIsEditingUmkm(true);
+                                  }}
+                                >
+                                  <Edit3 className="size-3.5" /> Edit
+                                </Button>
+                                <Button
+                                  variant="destructive"
+                                  size="sm"
+                                  className="size-8 p-0"
+                                  title="Hapus / Nonaktifkan"
+                                  onClick={() => handleDeleteUmkm(u.id, u.name)}
+                                >
+                                  <Trash2 className="size-3.5" />
+                                </Button>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
@@ -1012,18 +1068,7 @@ function AdminDashboardPage() {
         </div>
       </main>
 
-      <AdminUmkmDialog
-        isOpen={isUmkmDialogOpen}
-        onClose={() => {
-          setIsUmkmDialogOpen(false);
-          setEditingUmkm(null);
-          setUmkmFormError(null);
-        }}
-        umkm={editingUmkm}
-        onSave={handleSaveUmkm}
-        isSaving={isSavingUmkm}
-        error={umkmFormError}
-      />
+
 
       <AdminMinatDetailDialog
         isOpen={!!selectedMinat}

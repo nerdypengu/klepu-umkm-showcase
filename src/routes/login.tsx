@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/lib/auth-context";
-import { LogIn, UserPlus, AlertCircle, ShieldCheck } from "lucide-react";
+import { LogIn, UserPlus, AlertCircle } from "lucide-react";
 
 export const Route = createFileRoute("/login")({
   component: LoginPage,
@@ -118,11 +118,6 @@ function LoginPage() {
             <Link to="/register" className="font-bold text-primary hover:underline">
               Daftar Mitra Sekarang
             </Link>
-          </div>
-
-          <div className="mt-4 rounded-xl bg-muted/40 p-3 text-center text-[11px] text-muted-foreground">
-            <ShieldCheck className="mx-auto mb-1 size-4 text-primary" />
-            Akses Admin Desa Klepu juga dapat masuk menggunakan username admin.
           </div>
         </div>
       </main>
