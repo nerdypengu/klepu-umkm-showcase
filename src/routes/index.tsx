@@ -1,11 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { UmkmCard } from "@/components/umkm-card";
 import { VisiSection } from "@/components/visi-section";
 import { Highlight } from "@/components/highlight";
+import { VillageBanner } from "@/components/village-banner";
 import { B2bSection } from "@/components/b2b-section";
 import { SectionBackdrop } from "@/components/section-backdrop";
 import { Reveal } from "@/components/reveal";
@@ -62,7 +63,7 @@ function HomePage() {
               </p>
               <div className="mt-7 flex flex-wrap gap-3">
                 <Button asChild variant="clay" size="lg"><Link to="/" hash="umkm">Jelajahi UMKM <ArrowRight /></Link></Button>
-                <Button asChild variant="outline" size="lg" className="h-11 rounded-2xl shadow-clay"><a href="https://klepu-sooko.desa.id/" target="_blank" rel="noreferrer">Website Desa</a></Button>
+                <Button asChild variant="outline" size="lg" className="h-11 rounded-2xl shadow-clay"><a href="https://klepu-sooko.desa.id/" target="_blank" rel="noreferrer">Kunjungi Website Desa <ArrowUpRight /></a></Button>
               </div>
               <div className="mt-9 grid max-w-xl grid-cols-2 gap-4 sm:grid-cols-3">
                 {[
@@ -123,6 +124,8 @@ function HomePage() {
         <SectionBackdrop variant="rings">
           <PartnerStepsSection />
         </SectionBackdrop>
+
+        <VillageBanner />
       </main>
       <SiteFooter />
     </div>

@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/lib/auth-context";
 import { submitMinatServerFn } from "@/lib/minat.functions";
+import { createUploadTargetServerFn } from "@/lib/upload.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { ArrowRight, CheckCircle2, AlertCircle, LogIn, Briefcase, FileUp, FileText, X } from "lucide-react";
 
@@ -24,7 +25,7 @@ interface AjukanMinatDialogProps {
 }
 
 export function AjukanMinatDialog({ umkmId, umkmName }: AjukanMinatDialogProps) {
-  const { user, isLoggedIn } = useAuth();
+  const { user, token, isLoggedIn } = useAuth();
   const [open, setOpen] = React.useState(false);
   const [investmentType, setInvestmentType] = React.useState<
     "modal_kerja" | "pengadaan_alat" | "bagi_hasil" | "kemitraan_distribusi" | "lainnya"
@@ -84,6 +85,10 @@ export function AjukanMinatDialog({ umkmId, umkmName }: AjukanMinatDialogProps) 
     e.preventDefault();
     if (!user) return;
     setError(null);
+    if (!token) {
+      setError("Sesi Anda telah berakhir. Silakan keluar lalu masuk kembali.");
+      return;
+    }
 
     if (!notes.trim()) {
       setError("Harap isi deskripsi atau catatan kerja sama yang diharapkan.");
@@ -99,40 +104,42 @@ export function AjukanMinatDialog({ umkmId, umkmName }: AjukanMinatDialogProps) 
     let uploadedUrl: string | null = null;
     let uploadedFilename: string | null = null;
 
-    // Upload proposal file if attached
+    // Upload proposal file if attached, through a signed URL issued by the server
     if (proposalFile) {
-      try {
-        const cleanName = proposalFile.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-        const filePath = `${user.id}/${Date.now()}_${cleanName}`;
+      const contentType =
+        proposalFile.type ||
+        (proposalFile.name.toLowerCase().endsWith(".pdf")
+          ? "application/pdf"
+          : "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
 
-        const { error: uploadError } = await supabase.storage
-          .from("investment-proposals")
-          .upload(filePath, proposalFile, {
-            upsert: false,
-            contentType: proposalFile.type || (cleanName.endsWith(".pdf") ? "application/pdf" : "application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
-          });
-
-        if (uploadError) {
-          console.warn("Storage upload warning:", uploadError);
-          // If bucket doesn't exist yet, we still record proposal filename
-        } else {
-          const { data: publicUrlData } = supabase.storage
-            .from("investment-proposals")
-            .getPublicUrl(filePath);
-          uploadedUrl = publicUrlData.publicUrl;
-        }
-
-        uploadedFilename = proposalFile.name;
-      } catch (uploadErr) {
-        console.error("Proposal upload error:", uploadErr);
+      const target = await createUploadTargetServerFn({
+        data: { kind: "proposal", token: token ?? "", contentType, size: proposalFile.size },
+      });
+      if (!target.success || !target.target) {
+        setIsSubmitting(false);
+        setError(target.error || "Gagal menyiapkan unggahan proposal.");
+        return;
       }
+
+      const { error: uploadError } = await supabase.storage
+        .from(target.target.bucket)
+        .uploadToSignedUrl(target.target.path, target.target.uploadToken, proposalFile, { contentType });
+
+      if (uploadError) {
+        setIsSubmitting(false);
+        setError("Gagal mengunggah proposal. Coba lagi atau kirim tanpa dokumen.");
+        return;
+      }
+
+      uploadedUrl = target.target.publicUrl;
+      uploadedFilename = proposalFile.name;
     }
 
     const parsedNominal = nominal ? parseFloat(nominal.replace(/[^0-9]/g, "")) : null;
 
     const res = await submitMinatServerFn({
       data: {
-        userId: user.id,
+        token: token ?? "",
         umkmId,
         investmentType,
         targetItem: targetItem.trim() || null,

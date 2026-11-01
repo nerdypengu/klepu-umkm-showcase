@@ -306,8 +306,7 @@ function AdminDashboardPage() {
     const matchesSearch =
       u.name.toLowerCase().includes(q) ||
       u.owner.toLowerCase().includes(q) ||
-      u.category.toLowerCase().includes(q) ||
-      (u.village && u.village.toLowerCase().includes(q));
+      u.category.toLowerCase().includes(q);
     const matchesCategory = filterUmkmCategory === "all" || u.category === filterUmkmCategory;
     return matchesSearch && matchesCategory;
   });
@@ -340,7 +339,7 @@ function AdminDashboardPage() {
             />
           </div>
         </main>
-        <SiteFooter />
+        <SiteFooter compact />
       </div>
     );
   }

@@ -16,6 +16,8 @@ import {
   type UmkmAssessmentCriteria,
 } from "@/lib/umkm-scoring";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/lib/auth-context";
+import { createUploadTargetServerFn } from "@/lib/upload.functions";
 import {
   AlertCircle,
   ArrowLeft,
@@ -52,12 +54,12 @@ export function extractWhatsAppNumber(urlOrNumber?: string | null): string {
   const trimmed = urlOrNumber.trim();
   const phoneMatch = trimmed.match(/[?&]phone=([+\d]+)/);
   if (phoneMatch) {
-    const digits = phoneMatch[1].replace(/\D/g, "");
+    const digits = (phoneMatch[1] ?? "").replace(/\D/g, "");
     return digits.startsWith("62") ? "0" + digits.slice(2) : digits;
   }
   const waMatch = trimmed.match(/wa\.me\/([+\d]+)/);
   if (waMatch) {
-    const digits = waMatch[1].replace(/\D/g, "");
+    const digits = (waMatch[1] ?? "").replace(/\D/g, "");
     return digits.startsWith("62") ? "0" + digits.slice(2) : digits;
   }
   const digits = trimmed.replace(/\D/g, "");
@@ -104,6 +106,7 @@ export function AdminUmkmEditor({
 }: AdminUmkmEditorProps) {
   const handleBack = onBack || onClose || (() => {});
   const isEditing = !!umkm?.id;
+  const { token } = useAuth();
   const [activeTab, setActiveTab] = React.useState<string>("profil");
 
   // Tab 1: Profil Dasar & Media
@@ -313,20 +316,29 @@ export function AdminUmkmEditor({
 
   // Helper upload file ke Supabase Storage bucket 'umkm-media'
   const uploadToStorage = async (file: File, prefix: string): Promise<string> => {
-    const ext = file.name.split(".").pop()?.toLowerCase() || "bin";
     const cleanSlug = (slug || name || "media").toLowerCase().replace(/[^a-z0-9]/g, "-").replace(/(^-|-$)/g, "");
-    const fileName = `${prefix}-${cleanSlug}-${Date.now()}-${Math.random().toString(36).substring(2, 7)}.${ext}`;
+    const res = await createUploadTargetServerFn({
+      data: {
+        kind: "umkm-media",
+        token: token ?? "",
+        contentType: file.type,
+        size: file.size,
+        prefix: `${prefix}-${cleanSlug}`,
+      },
+    });
+    if (!res.success || !res.target) {
+      throw new Error(res.error || "Gagal menyiapkan unggahan");
+    }
 
     const { error: uploadErr } = await supabase.storage
-      .from("umkm-media")
-      .upload(fileName, file, { cacheControl: "3600", upsert: true });
+      .from(res.target.bucket)
+      .uploadToSignedUrl(res.target.path, res.target.uploadToken, file, { cacheControl: "3600" });
 
     if (uploadErr) {
       throw new Error(uploadErr.message || "Gagal mengunggah berkas ke penyimpanan storage");
     }
 
-    const { data } = supabase.storage.from("umkm-media").getPublicUrl(fileName);
-    return data.publicUrl;
+    return res.target.publicUrl;
   };
 
   const handleUploadMainPhoto = async (file: File) => {
@@ -565,7 +577,8 @@ export function AdminUmkmEditor({
       prioritySummary: livePrioritySummary,
       whatsapp: whatsappPhone.trim() ? buildWhatsAppLink(whatsappPhone, product || name) : "",
       mapsUrl: mapsUrl.trim(),
-    };
+      // photos/videos are deliberately undefined when emptied, so the saved record drops them
+    } as Partial<Umkm>;
 
     await onSave(payload);
   };
@@ -631,7 +644,7 @@ export function AdminUmkmEditor({
                   <strong className="font-display text-xl font-extrabold text-primary">{liveTotal}</strong>
                   <span className="text-xs font-semibold text-muted-foreground">/ 100</span>
                   <span className="ml-1 rounded-lg bg-primary/10 px-2 py-0.5 text-[11px] font-extrabold text-primary">
-                    {liveVerdict.label}
+                    {liveVerdict}
                   </span>
                 </div>
               </div>
@@ -1980,7 +1993,7 @@ export function AdminUmkmEditor({
               <span>Skor Total: <strong>{liveTotal}</strong>/100</span>
             </div>
             <span className="hidden sm:inline-block text-xs font-semibold text-muted-foreground">
-              Status Kelayakan: <strong className="text-foreground">{liveVerdict.label}</strong>
+              Status Kelayakan: <strong className="text-foreground">{liveVerdict}</strong>
             </span>
           </div>
 

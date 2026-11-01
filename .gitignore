@@ -42,3 +42,4 @@ supabase/config.toml
 supabase/.temp/
 supabase/.branches/
 
+.claude/

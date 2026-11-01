@@ -27,12 +27,13 @@ export const loginUserServerFn = createServerFn({ method: "POST" })
         return { success: false, error: error.message };
       }
 
-      const res = result as unknown as { user: UserProfile; token?: string } | UserProfile;
-      if ("user" in res && "token" in res) {
-        return { success: true, user: res.user, token: res.token };
+      // login_user reports wrong password / lockout as {error}, not as a database error.
+      const res = result as unknown as { error?: string; user?: UserProfile; token?: string };
+      if (res.error || !res.user) {
+        return { success: false, error: res.error || "Login gagal" };
       }
 
-      return { success: true, user: res as UserProfile };
+      return res.token ? { success: true, user: res.user, token: res.token } : { success: true, user: res.user };
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Terjadi kesalahan saat login";
       return { success: false, error: message };

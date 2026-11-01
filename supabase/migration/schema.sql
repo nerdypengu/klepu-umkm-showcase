@@ -292,19 +292,8 @@ CREATE POLICY "Public read umkm_roles" ON public.umkm_roles FOR SELECT USING (tr
 DROP POLICY IF EXISTS "Public read umkm_list_items" ON public.umkm_list_items;
 CREATE POLICY "Public read umkm_list_items" ON public.umkm_list_items FOR SELECT USING (true);
 
--- Users RLS (Passwords never accessible via direct select)
-DROP POLICY IF EXISTS "Users can read own profile" ON public.users;
-CREATE POLICY "Users can read own profile" ON public.users FOR SELECT USING (true);
-
--- Minat RLS
-DROP POLICY IF EXISTS "Users can create minat" ON public.minat;
-CREATE POLICY "Users can create minat" ON public.minat FOR INSERT WITH CHECK (true);
-
-DROP POLICY IF EXISTS "Public read minat" ON public.minat;
-CREATE POLICY "Public read minat" ON public.minat FOR SELECT USING (true);
-
-DROP POLICY IF EXISTS "Update minat status" ON public.minat;
-CREATE POLICY "Update minat status" ON public.minat FOR UPDATE USING (true);
+-- users, minat and user_sessions have NO policies on purpose: they are only reachable through the
+-- SECURITY DEFINER functions in section 6. (Open policies are dropped again in section 10.)
 
 -- ============================================================================
 -- 6. RPC Backend Stored Procedures
@@ -1128,36 +1117,13 @@ ON CONFLICT (id) DO UPDATE SET
     file_size_limit = 20971520,
     allowed_mime_types = ARRAY['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
 
--- Storage RLS Policies
-DROP POLICY IF EXISTS "Allow proposal uploads" ON storage.objects;
-CREATE POLICY "Allow proposal uploads" ON storage.objects
-FOR INSERT WITH CHECK (bucket_id = 'investment-proposals');
+-- Storage has NO policies on purpose: files are read by public URL, and uploads use signed URLs
+-- issued by the server (src/lib/upload.functions.ts). See section 10.
 
-DROP POLICY IF EXISTS "Allow proposal reads" ON storage.objects;
-CREATE POLICY "Allow proposal reads" ON storage.objects
-FOR SELECT USING (bucket_id = 'investment-proposals');
-
--- umkm-media bucket & policies
+-- umkm-media bucket
 INSERT INTO storage.buckets (id, name, public, file_size_limit)
 VALUES ('umkm-media', 'umkm-media', true, 52428800)
 ON CONFLICT (id) DO UPDATE SET public = true, file_size_limit = 52428800;
-
-DROP POLICY IF EXISTS "Allow umkm media reads" ON storage.objects;
-CREATE POLICY "Allow umkm media reads" ON storage.objects
-FOR SELECT USING (bucket_id = 'umkm-media');
-
-DROP POLICY IF EXISTS "Allow umkm media uploads" ON storage.objects;
-CREATE POLICY "Allow umkm media uploads" ON storage.objects
-FOR INSERT WITH CHECK (bucket_id = 'umkm-media');
-
-DROP POLICY IF EXISTS "Allow umkm media deletes" ON storage.objects;
-CREATE POLICY "Allow umkm media deletes" ON storage.objects
-FOR DELETE USING (bucket_id = 'umkm-media');
-
-DROP POLICY IF EXISTS "Allow umkm media updates" ON storage.objects;
-CREATE POLICY "Allow umkm media updates" ON storage.objects
-FOR UPDATE USING (bucket_id = 'umkm-media') WITH CHECK (bucket_id = 'umkm-media');
-
 
 -- ============================================================================
 -- 9. Potential (not-yet-existing) UMKM opportunities, e.g. rempah-rempah
@@ -1242,3 +1208,271 @@ VALUES (
     1
 )
 ON CONFLICT (slug) DO NOTHING;
+
+-- ============================================================================
+-- 10. Security hardening (idempotent). Safe to re-run after sections 1-9.
+-- ============================================================================
+
+-- 10.1 Remove old functions that have no login check, and a leftover test helper
+DROP FUNCTION IF EXISTS public.delete_test_wholesale();
+DROP FUNCTION IF EXISTS public.get_admin_dashboard_stats();
+DROP FUNCTION IF EXISTS public.get_all_minat();
+DROP FUNCTION IF EXISTS public.get_all_mitra();
+DROP FUNCTION IF EXISTS public.get_all_wholesale_requests();
+DROP FUNCTION IF EXISTS public.update_minat_status(UUID, TEXT, TEXT);
+DROP FUNCTION IF EXISTS public.update_wholesale_request_status(UUID, TEXT);
+-- Old submit_minat trusted a user id sent by the browser; replaced in 10.6
+DROP FUNCTION IF EXISTS public.submit_minat(UUID, TEXT, TEXT, TEXT, NUMERIC, TEXT, TEXT, TEXT, TEXT);
+
+-- 10.2 Server-only functions: no direct call from the browser key
+DO $$
+BEGIN
+    IF to_regprocedure('public.provision_admin_user(text,text,text,text,text)') IS NOT NULL THEN
+        REVOKE EXECUTE ON FUNCTION public.provision_admin_user(TEXT, TEXT, TEXT, TEXT, TEXT) FROM PUBLIC, anon, authenticated;
+    END IF;
+    IF to_regprocedure('public.verify_admin_session(text)') IS NOT NULL THEN
+        REVOKE EXECUTE ON FUNCTION public.verify_admin_session(TEXT) FROM PUBLIC, anon, authenticated;
+    END IF;
+    IF to_regprocedure('public.rls_auto_enable()') IS NOT NULL THEN
+        REVOKE EXECUTE ON FUNCTION public.rls_auto_enable() FROM PUBLIC, anon, authenticated;
+    END IF;
+END $$;
+
+-- 10.3 Close direct table access. All reads/writes go through the functions above.
+DROP POLICY IF EXISTS "Users can read own profile" ON public.users;
+DROP POLICY IF EXISTS "Allow delete users" ON public.users;
+DROP POLICY IF EXISTS "Users can create minat" ON public.minat;
+DROP POLICY IF EXISTS "Public read minat" ON public.minat;
+DROP POLICY IF EXISTS "Update minat status" ON public.minat;
+DROP POLICY IF EXISTS "Allow delete minat" ON public.minat;
+
+-- 10.4 Storage: no direct writes or listing from the browser key.
+-- Files stay readable by their public URL (buckets are public); uploads use signed URLs issued by the server.
+DROP POLICY IF EXISTS "Allow proposal uploads" ON storage.objects;
+DROP POLICY IF EXISTS "Allow proposal reads" ON storage.objects;
+DROP POLICY IF EXISTS "Allow umkm media reads" ON storage.objects;
+DROP POLICY IF EXISTS "Allow umkm media uploads" ON storage.objects;
+DROP POLICY IF EXISTS "Allow umkm media deletes" ON storage.objects;
+DROP POLICY IF EXISTS "Allow umkm media updates" ON storage.objects;
+
+UPDATE storage.buckets
+SET allowed_mime_types = ARRAY['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'video/mp4', 'video/webm']
+WHERE id = 'umkm-media';
+
+-- 10.5 Fixed search_path on the two functions that lacked it
+ALTER FUNCTION public.register_mitra(TEXT, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT)
+    SET search_path = public, extensions;
+
+-- 10.6 Login: throttle repeated failures, clean up expired sessions
+CREATE TABLE IF NOT EXISTS public.login_failures (
+    id BIGSERIAL PRIMARY KEY,
+    username TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_login_failures_user_time ON public.login_failures (username, created_at);
+ALTER TABLE public.login_failures ENABLE ROW LEVEL SECURITY;
+
+-- Failures are returned as {"error": "..."} instead of raised, because a raised error would roll back the failure record.
+CREATE OR REPLACE FUNCTION public.login_user(
+    p_username TEXT,
+    p_password TEXT
+)
+RETURNS JSONB
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, extensions
+AS $$
+DECLARE
+    v_user RECORD;
+    v_session_token TEXT;
+    v_name TEXT := lower(trim(coalesce(p_username, '')));
+BEGIN
+    DELETE FROM public.user_sessions WHERE expires_at < now();
+    DELETE FROM public.login_failures WHERE created_at < now() - INTERVAL '1 day';
+
+    IF (SELECT count(*) FROM public.login_failures
+        WHERE username = v_name AND created_at > now() - INTERVAL '15 minutes') >= 5 THEN
+        RETURN jsonb_build_object('error', 'Terlalu banyak percobaan masuk. Coba lagi dalam 15 menit.');
+    END IF;
+
+    SELECT id, username, password_hash, full_name, role, mitra_type, organization_name, organization_position, phone, address, is_active, created_at
+    INTO v_user
+    FROM public.users
+    WHERE lower(username) = v_name;
+
+    IF NOT FOUND OR v_user.password_hash != crypt(p_password, v_user.password_hash) THEN
+        INSERT INTO public.login_failures (username) VALUES (v_name);
+        RETURN jsonb_build_object('error', 'Username atau password salah');
+    END IF;
+
+    IF NOT v_user.is_active THEN
+        RETURN jsonb_build_object('error', 'Akun sedang dinonaktifkan');
+    END IF;
+
+    DELETE FROM public.login_failures WHERE username = v_name;
+
+    v_session_token := encode(gen_random_bytes(32), 'hex');
+
+    INSERT INTO public.user_sessions (user_id, token, role, expires_at)
+    VALUES (v_user.id, v_session_token, v_user.role, now() + INTERVAL '7 days');
+
+    RETURN jsonb_build_object(
+        'user', jsonb_build_object(
+            'id', v_user.id,
+            'username', v_user.username,
+            'fullName', v_user.full_name,
+            'role', v_user.role,
+            'mitraType', v_user.mitra_type,
+            'organizationName', v_user.organization_name,
+            'organizationPosition', v_user.organization_position,
+            'phone', v_user.phone,
+            'address', v_user.address,
+            'createdAt', v_user.created_at
+        ),
+        'token', v_session_token
+    );
+END;
+$$;
+
+-- 10.7 Mitra session check (server-only, used before issuing a proposal upload URL)
+CREATE OR REPLACE FUNCTION public.verify_user_session(p_token TEXT)
+RETURNS UUID
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+    v_user_id UUID;
+BEGIN
+    SELECT s.user_id INTO v_user_id
+    FROM public.user_sessions s
+    JOIN public.users u ON u.id = s.user_id
+    WHERE s.token = p_token AND s.expires_at > now() AND u.is_active = true;
+
+    IF v_user_id IS NULL THEN
+        RAISE EXCEPTION 'Sesi tidak valid atau telah kedaluwarsa';
+    END IF;
+
+    RETURN v_user_id;
+END;
+$$;
+REVOKE EXECUTE ON FUNCTION public.verify_user_session(TEXT) FROM PUBLIC, anon, authenticated;
+
+-- 10.8 Submit Minat: identity comes from the session token, not from the browser
+CREATE OR REPLACE FUNCTION public.submit_minat(
+    p_token TEXT,
+    p_umkm_id TEXT,
+    p_investment_type TEXT,
+    p_target_item TEXT DEFAULT NULL,
+    p_nominal NUMERIC DEFAULT NULL,
+    p_notes TEXT DEFAULT NULL,
+    p_phone TEXT DEFAULT NULL,
+    p_proposal_url TEXT DEFAULT NULL,
+    p_proposal_filename TEXT DEFAULT NULL
+)
+RETURNS JSONB
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+    v_user_id UUID;
+    v_new_id UUID;
+BEGIN
+    SELECT s.user_id INTO v_user_id
+    FROM public.user_sessions s
+    JOIN public.users u ON u.id = s.user_id
+    WHERE s.token = p_token AND s.expires_at > now() AND u.is_active = true;
+
+    IF v_user_id IS NULL THEN
+        RAISE EXCEPTION 'Sesi tidak valid atau telah kedaluwarsa. Silakan masuk kembali.';
+    END IF;
+
+    IF coalesce(trim(p_notes), '') = '' THEN
+        RAISE EXCEPTION 'Catatan kerja sama wajib diisi';
+    END IF;
+    IF coalesce(trim(p_phone), '') = '' THEN
+        RAISE EXCEPTION 'Nomor WhatsApp wajib diisi';
+    END IF;
+    IF p_nominal IS NOT NULL AND p_nominal < 0 THEN
+        RAISE EXCEPTION 'Nominal tidak valid';
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM public.umkm WHERE id = p_umkm_id) THEN
+        RAISE EXCEPTION 'UMKM tidak ditemukan';
+    END IF;
+    -- Only links to our own proposal bucket are accepted
+    IF p_proposal_url IS NOT NULL AND p_proposal_url NOT LIKE '%/storage/v1/object/public/investment-proposals/%' THEN
+        RAISE EXCEPTION 'Tautan proposal tidak valid';
+    END IF;
+
+    INSERT INTO public.minat (
+        user_id, umkm_id, investment_type, target_item, nominal_investment,
+        notes, contact_phone, proposal_url, proposal_filename
+    ) VALUES (
+        v_user_id,
+        p_umkm_id,
+        p_investment_type,
+        nullif(left(trim(p_target_item), 300), ''),
+        p_nominal,
+        left(trim(p_notes), 3000),
+        left(trim(p_phone), 40),
+        nullif(trim(p_proposal_url), ''),
+        nullif(left(trim(p_proposal_filename), 255), '')
+    )
+    RETURNING id INTO v_new_id;
+
+    RETURN jsonb_build_object('success', true, 'id', v_new_id);
+END;
+$$;
+
+-- ============================================================================
+-- 11. Spam limit on the public forms (wholesale request, potential interest)
+-- Per phone number: 5 submissions per hour. Per form overall: 60 per hour.
+-- Runs as a BEFORE INSERT trigger, so the submit functions do not change.
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS public.rate_limit_events (
+    id BIGSERIAL PRIMARY KEY,
+    kind TEXT NOT NULL,
+    key TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_rate_limit_events_lookup ON public.rate_limit_events (kind, key, created_at);
+ALTER TABLE public.rate_limit_events ENABLE ROW LEVEL SECURITY;
+
+CREATE OR REPLACE FUNCTION public.enforce_form_rate_limit()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+    v_kind TEXT := TG_ARGV[0];
+    v_key TEXT := regexp_replace(coalesce(NEW.phone, ''), '\D', '', 'g');
+BEGIN
+    DELETE FROM public.rate_limit_events WHERE created_at < now() - INTERVAL '1 day';
+
+    IF (SELECT count(*) FROM public.rate_limit_events
+        WHERE kind = v_kind AND key = v_key AND created_at > now() - INTERVAL '1 hour') >= 5 THEN
+        RAISE EXCEPTION 'Terlalu banyak pengiriman dari nomor ini. Coba lagi dalam satu jam.';
+    END IF;
+
+    IF (SELECT count(*) FROM public.rate_limit_events
+        WHERE kind = v_kind AND created_at > now() - INTERVAL '1 hour') >= 60 THEN
+        RAISE EXCEPTION 'Formulir sedang ramai. Coba lagi beberapa saat lagi.';
+    END IF;
+
+    INSERT INTO public.rate_limit_events (kind, key) VALUES (v_kind, v_key);
+    RETURN NEW;
+END;
+$$;
+REVOKE EXECUTE ON FUNCTION public.enforce_form_rate_limit() FROM PUBLIC, anon, authenticated;
+
+DROP TRIGGER IF EXISTS trg_wholesale_rate_limit ON public.wholesale_requests;
+CREATE TRIGGER trg_wholesale_rate_limit
+    BEFORE INSERT ON public.wholesale_requests
+    FOR EACH ROW EXECUTE FUNCTION public.enforce_form_rate_limit('wholesale');
+
+DROP TRIGGER IF EXISTS trg_potential_rate_limit ON public.potential_interests;
+CREATE TRIGGER trg_potential_rate_limit
+    BEFORE INSERT ON public.potential_interests
+    FOR EACH ROW EXECUTE FUNCTION public.enforce_form_rate_limit('potential');

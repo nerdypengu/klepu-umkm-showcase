@@ -96,7 +96,7 @@ export function SiteHeader() {
         </Link>
 
         <nav
-          className="mx-auto hidden items-center gap-0.5 rounded-full border border-border/80 bg-card/70 p-1 text-sm font-semibold lg:flex"
+          className="mx-auto hidden shrink-0 items-center gap-0.5 rounded-full border border-border/80 bg-card/70 p-1 text-sm font-semibold lg:flex"
           aria-label="Navigasi utama"
         >
           {navItems.map((item) => (
@@ -106,7 +106,7 @@ export function SiteHeader() {
               hash={item.hash}
               aria-current={active === item.hash ? "location" : undefined}
               className={cn(
-                "rounded-full px-3.5 py-1.5 transition-colors",
+                "whitespace-nowrap rounded-full px-3 py-1.5 transition-colors",
                 active === item.hash
                   ? "bg-primary text-primary-foreground"
                   : "text-foreground/70 hover:bg-secondary hover:text-foreground",
@@ -117,16 +117,7 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-3 lg:flex">
-          <a
-            href={VILLAGE_URL}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-1 text-xs font-semibold text-muted-foreground transition-colors hover:text-primary"
-          >
-            Website Desa <ArrowUpRight className="size-3.5" />
-          </a>
-          <span className="h-5 w-px bg-border" aria-hidden />
+        <div className="hidden shrink-0 items-center gap-3 lg:flex">
           <AccountControls />
         </div>
 
@@ -218,50 +209,49 @@ function AccountControls({ stacked = false }: { stacked?: boolean }) {
   );
 }
 
-export function SiteFooter() {
+export function SiteFooter({ compact = false }: { compact?: boolean }) {
   const year = new Date().getFullYear();
 
   return (
     <footer className="border-t border-border bg-secondary/40">
-      <div className="mx-auto grid max-w-6xl gap-10 px-5 py-12 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
-        <div>
-          <Link to="/" className="flex items-center gap-3" aria-label="Lapak UMKM Klepu, beranda">
-            <span className="grid size-10 place-items-center rounded-2xl bg-primary font-display text-lg font-extrabold text-primary-foreground shadow-clay-dark">
-              K
-            </span>
-            <span className="font-display text-base font-bold">Lapak UMKM Klepu</span>
-          </Link>
-          <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
-            Etalase UMKM dan peluang kemitraan Desa Klepu, Kecamatan Sooko, Kabupaten Ponorogo, Jawa Timur.
-          </p>
-        </div>
-
-        <FooterColumn title="Jelajahi">
-          {navItems.map((item) => (
-            <Link key={item.hash} to="/" hash={item.hash} className="hover:text-primary">
-              {item.label}
+      {!compact && (
+        <div className="mx-auto grid max-w-6xl gap-10 px-5 py-12 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr]">
+          <div>
+            <Link to="/" className="flex items-center gap-3" aria-label="Lapak UMKM Klepu, beranda">
+              <span className="grid size-10 place-items-center rounded-2xl bg-primary font-display text-lg font-extrabold text-primary-foreground shadow-clay-dark">
+                K
+              </span>
+              <span className="font-display text-base font-bold">Lapak UMKM Klepu</span>
             </Link>
-          ))}
-        </FooterColumn>
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-foreground/75">
+              Etalase UMKM dan peluang kemitraan Desa Klepu, Kecamatan Sooko, Kabupaten Ponorogo, Jawa Timur.
+            </p>
+          </div>
 
-        <FooterColumn title="Akun Mitra">
-          <Link to="/login" className="hover:text-primary">
-            Masuk
-          </Link>
-          <Link to="/register" className="hover:text-primary">
-            Daftar Mitra
-          </Link>
-        </FooterColumn>
+          <FooterColumn title="Jelajahi">
+            {navItems.map((item) => (
+              <Link key={item.hash} to="/" hash={item.hash} className="hover:text-primary">
+                {item.label}
+              </Link>
+            ))}
+          </FooterColumn>
 
-        <FooterColumn title="Tautan">
-          <a href={VILLAGE_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 hover:text-primary">
-            Website Desa Klepu <ArrowUpRight className="size-3.5" />
-          </a>
-        </FooterColumn>
-      </div>
+          <FooterColumn title="Akun & Tautan">
+            <Link to="/login" className="hover:text-primary">
+              Masuk
+            </Link>
+            <Link to="/register" className="hover:text-primary">
+              Daftar Mitra
+            </Link>
+            <a href={VILLAGE_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 hover:text-primary">
+              Website Desa Klepu <ArrowUpRight className="size-3.5" />
+            </a>
+          </FooterColumn>
+        </div>
+      )}
 
-      <div className="border-t border-border/70">
-        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-5 text-xs text-muted-foreground sm:px-6 md:flex-row md:items-center md:justify-between">
+      <div className={cn(!compact && "border-t border-border/70")}>
+        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-5 text-xs text-foreground/70 sm:px-6 md:flex-row md:items-center md:justify-between">
           <p>&copy; {year} Lapak UMKM Desa Klepu. Hak cipta dilindungi.</p>
           <p className="md:text-right">Nilai investasi bersifat indikatif, bukan realisasi atau jaminan hasil.</p>
         </div>
@@ -273,8 +263,8 @@ export function SiteFooter() {
 function FooterColumn({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div>
-      <h2 className="font-display text-sm font-bold uppercase text-foreground">{title}</h2>
-      <nav className="mt-4 flex flex-col gap-2.5 text-sm text-muted-foreground" aria-label={title}>
+      <h3 className="font-display text-sm font-bold uppercase text-foreground">{title}</h3>
+      <nav className="mt-4 flex flex-col gap-2.5 text-sm text-foreground/75" aria-label={title}>
         {children}
       </nav>
     </div>

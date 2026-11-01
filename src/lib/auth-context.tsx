@@ -84,8 +84,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const res = await registerMitraServerFn({ data });
       if (res.success && res.user) {
-        setUser(res.user);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(res.user));
+        // Registration creates no session, so sign in right away to get a token.
+        const session = await loginUserServerFn({ data: { username: data.username, password: data.password } });
+        if (session.success && session.user && session.token) {
+          setUser(session.user);
+          setToken(session.token);
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(session.user));
+          localStorage.setItem(TOKEN_KEY, session.token);
+        }
         return { success: true };
       }
       return { success: false, error: res.error || "Pendaftaran gagal" };

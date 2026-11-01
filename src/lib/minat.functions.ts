@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 
 export interface MinatSubmissionInput {
-  userId: string;
+  token: string;
   umkmId: string;
   investmentType: "modal_kerja" | "pengadaan_alat" | "bagi_hasil" | "kemitraan_distribusi" | "lainnya";
   targetItem?: string | null;
@@ -15,10 +15,10 @@ export interface MinatSubmissionInput {
 
 export const submitMinatServerFn = createServerFn({ method: "POST" })
   .validator((data: MinatSubmissionInput) => data)
-  .handler(async ({ data }): Promise<{ success: boolean; data?: unknown; error?: string }> => {
+  .handler(async ({ data }): Promise<{ success: boolean; error?: string }> => {
     try {
-      const { data: result, error } = await supabase.rpc("submit_minat", {
-        p_user_id: data.userId,
+      const { error } = await supabase.rpc("submit_minat", {
+        p_token: data.token,
         p_umkm_id: data.umkmId,
         p_investment_type: data.investmentType,
         p_target_item: data.targetItem ?? null,
@@ -33,7 +33,7 @@ export const submitMinatServerFn = createServerFn({ method: "POST" })
         return { success: false, error: error.message };
       }
 
-      return { success: true, data: result };
+      return { success: true };
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Gagal mengajukan minat investasi";
       return { success: false, error: message };
